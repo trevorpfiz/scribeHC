@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: ["class"],
   content: ["src/**/*.{ts,tsx}"],
   theme: {
     extend: {
@@ -39,9 +38,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-      },
-      borderColor: {
-        DEFAULT: "hsl(var(--border))",
       },
     },
   },

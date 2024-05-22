@@ -2,8 +2,8 @@ import type { ConfigContext, ExpoConfig } from "@expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "expo",
-  slug: "expo",
+  name: "scribeHH",
+  slug: "scribehh",
   scheme: "expo",
   version: "0.1.0",
   orientation: "portrait",
@@ -19,7 +19,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    bundleIdentifier: "your.bundle.identifier",
+    bundleIdentifier: "com.scribehh.app",
     supportsTablet: true,
     usesAppleSignIn: true,
     config: {
@@ -27,7 +27,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   android: {
-    package: "your.bundle.identifier",
+    package: "com.scribehh.app",
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#18181A",
@@ -37,10 +37,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     tsconfigPaths: true,
     typedRoutes: true,
   },
-  // extra: {
-  //   eas: {
-  //     projectId: "your-project-id",
-  //   },
-  // },
-  plugins: ["expo-router", "expo-secure-store", "expo-apple-authentication"],
+  extra: {
+    eas: {
+      projectId: "4c79936e-b351-4bc9-93bb-390f20e4364f",
+    },
+  },
+  plugins: [
+    "expo-router",
+    "expo-secure-store",
+    "expo-apple-authentication",
+    "expo-font",
+    "expo-build-properties",
+  ],
 });

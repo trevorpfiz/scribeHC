@@ -4,6 +4,7 @@ import animate from "tailwindcss-animate";
 import base from "./base";
 
 export default {
+  darkMode: ["class"],
   content: base.content,
   presets: [base],
   theme: {
@@ -33,6 +34,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      borderColor: {
+        DEFAULT: "hsl(var(--border))",
       },
     },
   },
