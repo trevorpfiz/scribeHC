@@ -97,11 +97,11 @@
     "@babel/runtime": "^7.24.5",
     "@expo/config-plugins": "^8.0.4",
     "@types/babel__core": "^7.20.5",
-    "@types/react": "^18.3.2",
+    "@types/react": "^18.2.79",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5.4.5"
+    "typescript": "^5.3.3"
   },
   "prettier": "@acme/prettier-config"
 }

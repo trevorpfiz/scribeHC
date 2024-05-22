@@ -42,11 +42,26 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       projectId: "4c79936e-b351-4bc9-93bb-390f20e4364f",
     },
   },
+  owner: "scribe-hh",
   plugins: [
     "expo-router",
     "expo-secure-store",
     "expo-apple-authentication",
     "expo-font",
-    "expo-build-properties",
+    [
+      "expo-build-properties",
+      {
+        android: {
+          minSdkVersion: 24,
+          compileSdkVersion: 33,
+          targetSdkVersion: 33,
+          buildToolsVersion: "33.0.0",
+          kotlinVersion: "1.6.20",
+        },
+        ios: {
+          deploymentTarget: "15.0",
+        },
+      },
+    ],
   ],
 });
