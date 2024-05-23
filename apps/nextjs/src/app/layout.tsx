@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import { cn } from "@hh/ui";
+import { Toaster } from "@hh/ui/sonner";
+import { ThemeProvider, ThemeToggle } from "@hh/ui/theme";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-
-import { cn } from "@acme/ui";
-import { Toaster } from "@acme/ui/sonner";
-import { ThemeProvider, ThemeToggle } from "@acme/ui/theme";
 
 import { TRPCReactProvider } from "~/trpc/react";
 

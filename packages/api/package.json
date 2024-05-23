@@ -1,5 +1,5 @@
 {
-  "name": "@acme/api",
+  "name": "@hh/api",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -19,8 +19,8 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "@acme/db": "workspace:*",
-    "@acme/validators": "workspace:*",
+    "@hh/db": "workspace:*",
+    "@hh/validators": "workspace:*",
     "@supabase/supabase-js": "^2.43.1",
     "@trpc/server": "11.0.0-rc.364",
     "nanoid": "^5.0.7",
@@ -28,12 +28,12 @@
     "zod": "^3.23.6"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
-    "@acme/prettier-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@hh/eslint-config": "workspace:*",
+    "@hh/prettier-config": "workspace:*",
+    "@hh/tsconfig": "workspace:*",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@hh/prettier-config"
 }

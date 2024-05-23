@@ -1,12 +1,11 @@
 "use client";
 
+import type { RouterOutputs } from "@hh/api";
 import { use } from "react";
 import Image from "next/image";
-
-import type { RouterOutputs } from "@acme/api";
-import { CreatePostSchema } from "@acme/db/schema";
-import { cn } from "@acme/ui";
-import { Button } from "@acme/ui/button";
+import { CreatePostSchema } from "@hh/db/schema";
+import { cn } from "@hh/ui";
+import { Button } from "@hh/ui/button";
 import {
   Form,
   FormControl,
@@ -14,9 +13,9 @@ import {
   FormItem,
   FormMessage,
   useForm,
-} from "@acme/ui/form";
-import { Input } from "@acme/ui/input";
-import { toast } from "@acme/ui/sonner";
+} from "@hh/ui/form";
+import { Input } from "@hh/ui/input";
+import { toast } from "@hh/ui/sonner";
 
 import { api } from "~/trpc/react";
 

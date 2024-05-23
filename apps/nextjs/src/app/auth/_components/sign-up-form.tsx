@@ -1,9 +1,7 @@
 "use client";
 
-import { useAction } from "next-safe-action/hooks";
-
-import type { SignUp } from "@acme/validators";
-import { Button } from "@acme/ui/button";
+import type { SignUp } from "@hh/validators";
+import { Button } from "@hh/ui/button";
 import {
   Form,
   FormControl,
@@ -12,9 +10,10 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@acme/ui/form";
-import { Input } from "@acme/ui/input";
-import { SignUpSchema } from "@acme/validators";
+} from "@hh/ui/form";
+import { Input } from "@hh/ui/input";
+import { SignUpSchema } from "@hh/validators";
+import { useAction } from "next-safe-action/hooks";
 
 import { FormError } from "~/app/auth/_components/form-error";
 import { FormSuccess } from "~/app/auth/_components/form-success";

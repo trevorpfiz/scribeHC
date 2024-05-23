@@ -1,5 +1,5 @@
 {
-  "name": "@acme/ui",
+  "name": "@hh/ui",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -30,10 +30,10 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@acme/eslint-config": "workspace:*",
-    "@acme/prettier-config": "workspace:*",
-    "@acme/tailwind-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@hh/eslint-config": "workspace:*",
+    "@hh/prettier-config": "workspace:*",
+    "@hh/tailwind-config": "workspace:*",
+    "@hh/tsconfig": "workspace:*",
     "@types/react": "^18.3.2",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",
@@ -46,5 +46,5 @@
     "react": "18.3.1",
     "zod": "^3.23.6"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@hh/prettier-config"
 }

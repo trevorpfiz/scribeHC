@@ -8,7 +8,7 @@ const path = require("path");
 module.exports = withTurborepoManagedCache(
   withMonorepoPaths(
     withNativeWind(getDefaultConfig(__dirname), {
-      input: "./src/styles.css",
+      input: "./src/global.css",
       configPath: "./tailwind.config.ts",
     }),
   ),

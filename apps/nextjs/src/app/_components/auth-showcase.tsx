@@ -1,6 +1,5 @@
 import Link from "next/link";
-
-import { Button } from "@acme/ui/button";
+import { Button } from "@hh/ui/button";
 
 import { SignOutButton } from "~/app/auth/_components/sign-out-button";
 import { DEFAULT_AUTH_ROUTE } from "~/config/routes";

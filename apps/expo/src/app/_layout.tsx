@@ -1,18 +1,19 @@
-import "../styles.css";
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import "../global.css";
 import "@bacons/text-decoder/install";
 
+import type { Theme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Theme, ThemeProvider } from "@react-navigation/native";
+import { ThemeProvider } from "@react-navigation/native";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 
-import { AuthAvatar } from "~/components/header";
 import { ThemeToggle } from "~/components/theme-toggle";
-import { Text } from "~/components/ui/text";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/use-color-scheme";
@@ -85,35 +86,12 @@ export default function RootLayout() {
           <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
 
           <GestureHandlerRootView style={{ flex: 1 }}>
-            {/*
-             * The Stack component displays the current page.
-             * It also allows you to configure your screens
-             */}
             <Stack>
               <Stack.Screen
                 name="index"
                 options={{
-                  title: "T3 x Supabase",
-                  headerTitle: () => (
-                    <Text className="text-3xl font-bold text-muted-foreground">
-                      <Text className="text-fuchsia-500">T3</Text>
-                      <Text> x </Text>
-                      <Text className="text-emerald-400">Supabase</Text>
-                    </Text>
-                  ),
-                  headerLeft: () => <AuthAvatar />,
+                  title: "Starter Base",
                   headerRight: () => <ThemeToggle />,
-                }}
-              />
-              {/*
-               * Present the profile screen as a modal
-               * @see https://expo.github.io/router/docs/guides/modals
-               */}
-              <Stack.Screen
-                name="profile"
-                options={{
-                  presentation: "modal",
-                  title: "Profile",
                 }}
               />
             </Stack>

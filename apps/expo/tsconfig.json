@@ -1,5 +1,5 @@
 {
-  "extends": ["@acme/tsconfig/base.json"],
+  "extends": ["@hh/tsconfig/base.json"],
   "compilerOptions": {
     "lib": ["es2022", "dom", "dom.iterable"],
     "baseUrl": ".",

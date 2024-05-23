@@ -33,11 +33,19 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: "#18181A",
     },
   },
+  web: {
+    bundler: "metro",
+    output: "single",
+    favicon: "./assets/favicon.png",
+  },
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
   },
   extra: {
+    router: {
+      origin: false,
+    },
     eas: {
       projectId: "4c79936e-b351-4bc9-93bb-390f20e4364f",
     },

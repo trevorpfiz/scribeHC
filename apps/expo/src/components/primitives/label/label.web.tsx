@@ -1,24 +1,26 @@
-import * as Label from '@radix-ui/react-label';
-import * as Slot from '~/components/primitives/slot';
+import * as React from "react";
+import { Text as RNText } from "react-native";
+import * as Label from "@radix-ui/react-label";
+
+import type { LabelRootProps, LabelTextProps } from "./types";
 import type {
   PressableRef,
   SlottablePressableProps,
   SlottableTextProps,
   TextRef,
-} from '~/components/primitives/types';
-import * as React from 'react';
-import { Text as RNText } from 'react-native';
-import type { LabelRootProps, LabelTextProps } from './types';
+} from "~/components/primitives/types";
+import * as Slot from "~/components/primitives/slot";
 
 const Root = React.forwardRef<
   PressableRef,
-  Omit<SlottablePressableProps, 'children' | 'hitSlop' | 'style'> & LabelRootProps
+  Omit<SlottablePressableProps, "children" | "hitSlop" | "style"> &
+    LabelRootProps
 >(({ asChild, ...props }, ref) => {
   const Component = asChild ? Slot.View : Slot.View;
   return <Component ref={ref} {...props} />;
 });
 
-Root.displayName = 'RootWebLabel';
+Root.displayName = "RootWebLabel";
 
 const Text = React.forwardRef<TextRef, SlottableTextProps & LabelTextProps>(
   ({ asChild, nativeID, ...props }, ref) => {
@@ -28,9 +30,9 @@ const Text = React.forwardRef<TextRef, SlottableTextProps & LabelTextProps>(
         <Component ref={ref} {...props} />
       </Label.Root>
     );
-  }
+  },
 );
 
-Text.displayName = 'TextWebLabel';
+Text.displayName = "TextWebLabel";
 
 export { Root, Text };

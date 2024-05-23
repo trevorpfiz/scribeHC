@@ -1,5 +1,5 @@
 {
-  "name": "@acme/eslint-config",
+  "name": "@hh/eslint-config",
   "private": true,
   "version": "0.3.0",
   "type": "module",
@@ -23,11 +23,11 @@
     "typescript-eslint": "^7.8.0"
   },
   "devDependencies": {
-    "@acme/prettier-config": "workspace:*",
-    "@acme/tsconfig": "workspace:*",
+    "@hh/prettier-config": "workspace:*",
+    "@hh/tsconfig": "workspace:*",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
   },
-  "prettier": "@acme/prettier-config"
+  "prettier": "@hh/prettier-config"
 }

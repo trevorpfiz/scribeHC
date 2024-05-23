@@ -1,165 +1,116 @@
-import React from "react";
+import * as React from "react";
+import { View } from "react-native";
+import Animated, {
+  FadeInUp,
+  FadeOutDown,
+  LayoutAnimationConfig,
+} from "react-native-reanimated";
+
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
 import {
-  Alert,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Image } from "expo-image";
-import { Link, Stack } from "expo-router";
-import { FlashList } from "@shopify/flash-list";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import { Progress } from "~/components/ui/progress";
+import { Text } from "~/components/ui/text";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import { Info } from "~/lib/icons/info";
 
-import type { RouterOutputs } from "~/utils/api";
-import { AuthAvatar } from "~/components/header";
-import { api } from "~/utils/api";
+const GITHUB_AVATAR_URI =
+  "https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
 
-function PostCard(props: { post: RouterOutputs["post"]["all"][number] }) {
-  const { post } = props;
+export default function Screen() {
+  const [progress, setProgress] = React.useState(78);
 
-  const utils = api.useUtils();
-
-  const { mutate: deletePost } = api.post.delete.useMutation({
-    onSettled: () => utils.post.all.invalidate(),
-    onError: (error) => {
-      if (error.data?.code === "UNAUTHORIZED")
-        Alert.alert("Error", "Only the author can delete their post");
-    },
-  });
-
+  function updateProgressValue() {
+    setProgress(Math.floor(Math.random() * 100));
+  }
   return (
-    <View className="flex flex-row rounded-lg bg-muted p-4">
-      <View className="flex-grow">
-        <Link
-          asChild
-          href={{
-            pathname: "/post/[id]",
-            params: { id: props.post.id },
-          }}
-        >
-          <Pressable>
-            <Image
-              className="mr-2 h-10 w-10 self-center rounded-full"
-              source={post.author.image ?? ""}
-            />
-            <View>
-              <Text className="text-xl font-semibold text-emerald-400">
-                {post.title}
-              </Text>
-              <Text className="mt-2 text-foreground">{post.content}</Text>
+    <View className="flex-1 items-center justify-center gap-5 bg-secondary/30 p-6">
+      <Card className="w-full max-w-sm rounded-2xl p-6">
+        <CardHeader className="items-center">
+          <Avatar alt="Rick Sanchez's Avatar" className="h-24 w-24">
+            <AvatarImage source={{ uri: GITHUB_AVATAR_URI }} />
+            <AvatarFallback>
+              <Text>RS</Text>
+            </AvatarFallback>
+          </Avatar>
+          <View className="p-3" />
+          <CardTitle className="pb-2 text-center">Rick Sanchez</CardTitle>
+          <View className="flex-row">
+            <CardDescription className="text-base font-semibold">
+              Scientist
+            </CardDescription>
+            <Tooltip delayDuration={150}>
+              <TooltipTrigger className="px-2 pb-0.5 active:opacity-50">
+                <Info
+                  size={14}
+                  strokeWidth={2.5}
+                  className="h-4 w-4 text-foreground/70"
+                />
+              </TooltipTrigger>
+              <TooltipContent className="px-4 py-2 shadow">
+                <Text className="native:text-lg">Freelance</Text>
+              </TooltipContent>
+            </Tooltip>
+          </View>
+        </CardHeader>
+        <CardContent>
+          <View className="flex-row justify-around gap-3">
+            <View className="items-center">
+              <Text className="text-sm text-muted-foreground">Dimension</Text>
+              <Text className="text-xl font-semibold">C-137</Text>
             </View>
-          </Pressable>
-        </Link>
-      </View>
-      <Pressable onPress={() => deletePost(post.id)}>
-        <Text className="font-bold uppercase text-emerald-400">Delete</Text>
-      </Pressable>
-    </View>
-  );
-}
-
-function CreatePost() {
-  const utils = api.useUtils();
-
-  const [title, setTitle] = React.useState("");
-  const [content, setContent] = React.useState("");
-
-  const { mutate: createPost, error } = api.post.create.useMutation({
-    onSuccess: async () => {
-      setTitle("");
-      setContent("");
-      Keyboard.dismiss();
-      await utils.post.all.invalidate();
-    },
-    onError: (error) => {
-      if (error.data?.code === "UNAUTHORIZED")
-        Alert.alert("Error", "You must be logged in to create a post");
-    },
-  });
-
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={150}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} className="flex-1">
-        <View className="mt-4 justify-around">
-          <TextInput
-            className="mb-2 rounded bg-background p-2 text-zinc-200"
-            placeholderTextColor="#A1A1A9" // zinc-400
-            value={title}
-            onChangeText={setTitle}
-            placeholder="Title"
+            <View className="items-center">
+              <Text className="text-sm text-muted-foreground">Age</Text>
+              <Text className="text-xl font-semibold">70</Text>
+            </View>
+            <View className="items-center">
+              <Text className="text-sm text-muted-foreground">Species</Text>
+              <Text className="text-xl font-semibold">Human</Text>
+            </View>
+          </View>
+        </CardContent>
+        <CardFooter className="flex-col gap-3 pb-0">
+          <View className="flex-row items-center overflow-hidden">
+            <Text className="text-sm text-muted-foreground">Productivity:</Text>
+            <LayoutAnimationConfig skipEntering>
+              <Animated.View
+                key={progress}
+                entering={FadeInUp}
+                exiting={FadeOutDown}
+                className="w-11 items-center"
+              >
+                <Text className="text-sm font-bold text-sky-600">
+                  {progress}%
+                </Text>
+              </Animated.View>
+            </LayoutAnimationConfig>
+          </View>
+          <Progress
+            value={progress}
+            className="h-2"
+            indicatorClassName="bg-sky-600"
           />
-          {error?.data?.zodError?.fieldErrors.title && (
-            <Text className="mb-2 text-red-500">
-              {error.data.zodError.fieldErrors.title}
-            </Text>
-          )}
-          <TextInput
-            className="mb-2 rounded bg-background p-2 text-zinc-200"
-            placeholderTextColor="#A1A1A9" // zinc-400
-            value={content}
-            onChangeText={setContent}
-            placeholder="Content"
-          />
-          {error?.data?.zodError?.fieldErrors.content && (
-            <Text className="mb-2 text-destructive">
-              {error.data.zodError.fieldErrors.content}
-            </Text>
-          )}
-          <Pressable
-            className="rounded bg-emerald-400 p-2"
-            onPress={() => {
-              createPost({
-                title,
-                content,
-              });
-            }}
+          <View />
+          <Button
+            variant="outline"
+            className="shadow shadow-foreground/5"
+            onPress={updateProgressValue}
           >
-            <Text className="font-semibold text-foreground">Publish post</Text>
-          </Pressable>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
-  );
-}
-
-export default function HomeScreen() {
-  const utils = api.useUtils();
-
-  const postQuery = api.post.all.useQuery();
-
-  return (
-    <SafeAreaView className="bg-background">
-      <View className="h-full w-full bg-background p-4">
-        <Pressable
-          className="my-4 rounded bg-emerald-400 p-2"
-          onPress={() => void utils.post.all.invalidate()}
-        >
-          <Text className="font-semibold text-foreground">Refresh posts</Text>
-        </Pressable>
-
-        <View className="py-2">
-          <Text className="font-semibold italic text-primary">
-            Press on a post
-          </Text>
-        </View>
-
-        <FlashList
-          data={postQuery.data}
-          estimatedItemSize={20}
-          ItemSeparatorComponent={() => <View className="h-2" />}
-          renderItem={(p) => <PostCard post={p.item} />}
-        />
-
-        <CreatePost />
-      </View>
-    </SafeAreaView>
+            <Text>Update</Text>
+          </Button>
+        </CardFooter>
+      </Card>
+    </View>
   );
 }

@@ -1,10 +1,9 @@
 import type { Config } from "tailwindcss";
 // @ts-expect-error - no types
 import nativewind from "nativewind/preset";
+import { hairlineWidth } from "nativewind/theme";
 
-import baseConfig from "@acme/tailwind-config/native";
-
-const { hairlineWidth } = require("nativewind/theme");
+import baseConfig from "@hh/tailwind-config/native";
 
 export default {
   darkMode: "class",
