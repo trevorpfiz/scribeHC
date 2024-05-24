@@ -11,6 +11,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 
 import { Button } from "~/components/ui/button";
+import GoogleSvg from "~/components/ui/svg/google-icon";
 import { Text } from "~/components/ui/text";
 
 const CustomBackground: React.FC<BottomSheetBackgroundProps> = ({
@@ -58,28 +59,25 @@ const LoginBottomSheet = () => {
         </Button>
         <Button
           size="lg"
-          className="flex-row items-center gap-2 rounded-xl bg-gray-600"
+          className="flex-row items-center gap-2 rounded-xl bg-zinc-600"
         >
-          <Ionicons name="logo-google" size={16} color="#fff" />
+          <GoogleSvg size={20} />
           <Text className="font-semibold text-white">Continue with Google</Text>
         </Button>
-        <Link
-          href={{ pathname: "/login", params: { type: "register" } }}
-          asChild
-        >
+        <Link href={{ pathname: "/signup" }} asChild>
           <Button
             size="lg"
-            className="flex-row items-center gap-2 rounded-xl bg-gray-600"
+            className="flex-row items-center gap-2 rounded-xl bg-zinc-600"
           >
-            <Ionicons name="mail" size={20} className="pr-2" color="#fff" />
+            <Ionicons name="mail" size={20} color="#fff" />
             <Text className="font-semibold text-white">Sign up with email</Text>
           </Button>
         </Link>
-        <Link href={{ pathname: "/toggle", params: { type: "login" } }} asChild>
+        <Link href={{ pathname: "/toggle" }} asChild>
           <Button
             variant="outline"
             size="lg"
-            className="flex-row items-center gap-2 rounded-xl border-gray-600 bg-black active:bg-white"
+            className="flex-row items-center gap-2 rounded-xl border-zinc-600 bg-black active:bg-white"
             textClassName="group-active:text-black"
           >
             <Text className="font-semibold text-white">Log in</Text>

@@ -7,19 +7,19 @@ import type { Theme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Platform, TouchableOpacity } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SplashScreen, Stack, useRouter } from "expo-router";
+import { Slot, SplashScreen, Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "@react-navigation/native";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
 
 import { ThemeToggle } from "~/components/theme-toggle";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/use-color-scheme";
 import { TRPCProvider } from "~/utils/api";
-import { supabase } from "~/utils/supabase";
+import { tokenCache } from "~/utils/cache";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -43,12 +43,68 @@ export const unstable_settings = {
   initialRouteName: "index",
 };
 
+const InitialLayout = () => {
+  const router = useRouter();
+  const { isLoaded, isSignedIn } = useAuth();
+  const segments = useSegments();
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    const inAuthGroup = segments[0] === "(auth)";
+
+    if (isSignedIn && !inAuthGroup) {
+      router.replace("/(auth)/(drawer)/(chat)/new");
+    } else if (!isSignedIn) {
+      router.replace("/");
+    }
+  }, [isSignedIn]);
+
+  if (!isLoaded) {
+    return null;
+  }
+
+  return (
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="toggle"
+        options={{
+          title: "Starter Base",
+          headerRight: () => <ThemeToggle />,
+        }}
+      />
+      <Stack.Screen
+        name="signup"
+        options={{
+          presentation: "modal",
+          title: "Sign Up",
+          headerTitle: "",
+          headerTitleStyle: {
+            fontFamily: "mon-sb",
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.dismiss()}>
+              <Ionicons name="close-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      {/* <Stack.Screen name="(auth)" options={{ headerShown: false }} /> */}
+    </Stack>
+  );
+};
+
 // This is the main layout of the app
 // It wraps your pages with the providers they need
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -82,46 +138,19 @@ export default function RootLayout() {
   }
 
   return (
-    <SessionContextProvider supabaseClient={supabase}>
+    <ClerkProvider
+      publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY ?? ""}
+      tokenCache={tokenCache}
+    >
       <TRPCProvider>
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
           <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
 
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <Stack>
-              <Stack.Screen
-                name="index"
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="toggle"
-                options={{
-                  title: "Starter Base",
-                  headerRight: () => <ThemeToggle />,
-                }}
-              />
-              {/* <Stack.Screen
-                name="login"
-                options={{
-                  presentation: "modal",
-                  title: "",
-                  headerTitleStyle: {
-                    fontFamily: "mon-sb",
-                  },
-                  headerLeft: () => (
-                    <TouchableOpacity onPress={() => router.back()}>
-                      <Ionicons name="close-outline" size={28} />
-                    </TouchableOpacity>
-                  ),
-                }}
-              />
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} /> */}
-            </Stack>
+            <InitialLayout />
           </GestureHandlerRootView>
         </ThemeProvider>
       </TRPCProvider>
-    </SessionContextProvider>
+    </ClerkProvider>
   );
 }
