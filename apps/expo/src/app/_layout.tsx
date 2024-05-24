@@ -5,10 +5,11 @@ import "@bacons/text-decoder/install";
 
 import type { Theme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Platform } from "react-native";
+import { Platform, TouchableOpacity } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen, Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "@react-navigation/native";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
@@ -47,6 +48,7 @@ export const unstable_settings = {
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -90,10 +92,32 @@ export default function RootLayout() {
               <Stack.Screen
                 name="index"
                 options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="toggle"
+                options={{
                   title: "Starter Base",
                   headerRight: () => <ThemeToggle />,
                 }}
               />
+              {/* <Stack.Screen
+                name="login"
+                options={{
+                  presentation: "modal",
+                  title: "",
+                  headerTitleStyle: {
+                    fontFamily: "mon-sb",
+                  },
+                  headerLeft: () => (
+                    <TouchableOpacity onPress={() => router.back()}>
+                      <Ionicons name="close-outline" size={28} />
+                    </TouchableOpacity>
+                  ),
+                }}
+              />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} /> */}
             </Stack>
           </GestureHandlerRootView>
         </ThemeProvider>
