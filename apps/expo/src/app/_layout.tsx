@@ -95,6 +95,22 @@ const InitialLayout = () => {
           ),
         }}
       />
+      <Stack.Screen
+        name="signin"
+        options={{
+          presentation: "modal",
+          title: "Sign In",
+          headerTitle: "",
+          headerTitleStyle: {
+            fontFamily: "mon-sb",
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.dismiss()}>
+              <Ionicons name="close-outline" size={28} />
+            </TouchableOpacity>
+          ),
+        }}
+      />
       {/* <Stack.Screen name="(auth)" options={{ headerShown: false }} /> */}
     </Stack>
   );

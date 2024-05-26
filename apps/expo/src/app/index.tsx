@@ -1,10 +1,10 @@
 import React from "react";
 import { View } from "react-native";
 
+import AnimatedIntro from "~/components/intro/animated-intro";
 import LoginBottomSheet from "~/components/login-bottom-sheet";
-import AnimatedIntro from "~/components/ui/intro/animated-intro";
 
-export default function Index() {
+export default function IndexScreen() {
   return (
     <View className="flex-1">
       <AnimatedIntro />

@@ -1,7 +1,7 @@
 {
-  "extends": ["@hh/tsconfig/base.json"],
+  "extends": "@hh/tsconfig/base.json",
   "compilerOptions": {
-    "lib": ["es2022", "dom", "dom.iterable"],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"]
@@ -9,7 +9,8 @@
     "jsx": "react-native",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "types": ["nativewind/types"],
-    "checkJs": false
+    "checkJs": false,
+    "module": "esnext"
   },
   "include": ["src", "*.ts", "*.js", ".expo/types/**/*.ts", "expo-env.d.ts"],
   "exclude": ["node_modules"]

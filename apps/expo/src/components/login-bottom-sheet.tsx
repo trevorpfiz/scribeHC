@@ -10,8 +10,8 @@ import BottomSheet, {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 
+import GoogleSvg from "~/components/svg/google-icon";
 import { Button } from "~/components/ui/button";
-import GoogleSvg from "~/components/ui/svg/google-icon";
 import { Text } from "~/components/ui/text";
 
 const CustomBackground: React.FC<BottomSheetBackgroundProps> = ({
@@ -73,7 +73,7 @@ const LoginBottomSheet = () => {
             <Text className="font-semibold text-white">Sign up with email</Text>
           </Button>
         </Link>
-        <Link href={{ pathname: "/toggle" }} asChild>
+        <Link href={{ pathname: "/signin" }} asChild>
           <Button
             variant="outline"
             size="lg"
