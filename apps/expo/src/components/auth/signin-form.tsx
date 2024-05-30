@@ -5,15 +5,16 @@ import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { useRouter } from "expo-router";
 import { useSignIn } from "@clerk/clerk-expo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
-import { SignIn, SignInSchema } from "@hh/validators";
+import type { SignIn } from "@hh/validators";
+import { SignInSchema } from "@hh/validators";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Text } from "~/components/ui/text";
+import { Loader2 } from "~/lib/icons/loader-2";
 import { cn } from "~/lib/utils";
 
 const SignInForm = () => {
@@ -154,7 +155,9 @@ const SignInForm = () => {
               </Text>
             </View>
           ) : (
-            "Submit"
+            <Text className="text-xl font-medium text-primary-foreground">
+              Submit
+            </Text>
           )}
         </Button>
       </View>

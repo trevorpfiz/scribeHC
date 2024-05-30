@@ -4,7 +4,6 @@ import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { useRouter } from "expo-router";
 import { useSignUp } from "@clerk/clerk-expo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react-native";
 import {
   Controller,
   FormProvider,
@@ -14,12 +13,13 @@ import {
 
 import { SignUp, SignUpSchema } from "@hh/validators";
 
+import { OTPVerification } from "~/components/auth/otp-verification";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Text } from "~/components/ui/text";
+import { Loader2 } from "~/lib/icons/loader-2";
 import { cn } from "~/lib/utils";
-import PendingVerification from "./PendingVerification";
 
 const SignUpForm = () => {
   const { signUp, isLoaded } = useSignUp();
@@ -161,7 +161,9 @@ const SignUpForm = () => {
                   </Text>
                 </View>
               ) : (
-                "Submit"
+                <Text className="text-xl font-medium text-primary-foreground">
+                  Submit
+                </Text>
               )}
             </Button>
           </View>
@@ -169,10 +171,7 @@ const SignUpForm = () => {
       )}
 
       {pendingVerification && (
-        <PendingVerification
-          email={email}
-          onSuccess={handleVerificationSuccess}
-        />
+        <OTPVerification email={email} onSuccess={handleVerificationSuccess} />
       )}
     </View>
   );

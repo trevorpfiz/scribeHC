@@ -35,6 +35,15 @@ function withMonorepoPaths(config) {
     path.resolve(workspaceRoot, "node_modules"),
   ];
 
+  // #3 - Package Exports Support (Experimental)
+  // @link https://metrobundler.dev/docs/package-exports
+  config.resolver.unstable_enablePackageExports = true;
+  config.resolver.unstable_conditionNames = [
+    "browser",
+    "require",
+    "react-native",
+  ];
+
   return config;
 }
 
