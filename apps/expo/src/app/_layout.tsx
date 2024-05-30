@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import "../global.css";
 import "@bacons/text-decoder/install";
 
@@ -7,6 +7,10 @@ import type { Theme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Platform, TouchableOpacity } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  initialWindowMetrics,
+  SafeAreaProvider,
+} from "react-native-safe-area-context";
 import { Slot, SplashScreen, Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
@@ -14,6 +18,9 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "@react-navigation/native";
 
+// import * as SystemUI from "expo-system-ui";
+
+import { HeaderCloseButton } from "~/components/header";
 import { ThemeToggle } from "~/components/theme-toggle";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { NAV_THEME } from "~/lib/constants";
@@ -53,11 +60,11 @@ const InitialLayout = () => {
       return;
     }
 
-    const inAuthGroup = segments[0] === "(auth)";
+    const inAppGroup = segments[0] === "(app)";
 
-    console.log("inAuthGroup", inAuthGroup, "isSignedIn", isSignedIn);
+    console.log("inAppGroup", inAppGroup, "isSignedIn", isSignedIn);
 
-    if (isSignedIn && !inAuthGroup) {
+    if (isSignedIn && !inAppGroup) {
       console.log("replace", isSignedIn);
 
       if (router.canDismiss()) {
@@ -94,14 +101,7 @@ const InitialLayout = () => {
           presentation: "modal",
           title: "Sign Up",
           headerTitle: "",
-          headerTitleStyle: {
-            fontFamily: "mon-sb",
-          },
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.dismiss()}>
-              <Ionicons name="close-outline" size={28} />
-            </TouchableOpacity>
-          ),
+          headerLeft: HeaderCloseButton,
         }}
       />
       <Stack.Screen
@@ -110,17 +110,19 @@ const InitialLayout = () => {
           presentation: "modal",
           title: "Sign In",
           headerTitle: "",
-          headerTitleStyle: {
-            fontFamily: "mon-sb",
-          },
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.dismiss()}>
-              <Ionicons name="close-outline" size={28} />
-            </TouchableOpacity>
-          ),
+          headerLeft: HeaderCloseButton,
         }}
       />
-      {/* <Stack.Screen name="(auth)" options={{ headerShown: false }} /> */}
+      <Stack.Screen
+        name="reset-password"
+        options={{
+          presentation: "modal",
+          title: "Reset Password",
+          headerTitle: "",
+          headerLeft: HeaderCloseButton,
+        }}
+      />
+      {/* <Stack.Screen name="(app)" options={{ headerShown: false }} /> */}
     </Stack>
   );
 };
@@ -156,7 +158,15 @@ export default function RootLayout() {
     })().finally(() => {
       SplashScreen.hideAsync();
     });
-  }, []);
+  }, [colorScheme, setColorScheme]);
+
+  // useEffect(() => {
+  //   if (isDarkColorScheme) {
+  //     SystemUI.setBackgroundColorAsync("white");
+  //   } else {
+  //     SystemUI.setBackgroundColorAsync("black");
+  //   }
+  // }, [isDarkColorScheme]);
 
   if (!isColorSchemeLoaded) {
     return null;
@@ -172,7 +182,9 @@ export default function RootLayout() {
           <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
 
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <InitialLayout />
+            <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+              <InitialLayout />
+            </SafeAreaProvider>
           </GestureHandlerRootView>
         </ThemeProvider>
       </TRPCProvider>

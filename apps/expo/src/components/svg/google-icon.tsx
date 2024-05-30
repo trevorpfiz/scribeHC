@@ -1,8 +1,9 @@
 // https://react-svgr.com/playground/?icon=true&native=true&typescript=true
 
+import type { SvgProps } from "react-native-svg";
 import * as React from "react";
 import { View } from "react-native";
-import Svg, { Path, SvgProps } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 
 const originalWidth = 24;
 const originalHeight = 24;

@@ -1,31 +1,29 @@
-import * as React from "react";
-import { View } from "react-native";
+import type { SubmitHandler } from "react-hook-form";
+import { useState } from "react";
+import { TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
-import { useRouter } from "expo-router";
 import { useSignUp } from "@clerk/clerk-expo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Controller,
-  FormProvider,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 
-import { SignUp, SignUpSchema } from "@hh/validators";
+import type { SignUp } from "@hh/validators";
+import { SignUpSchema } from "@hh/validators";
 
 import { OTPVerification } from "~/components/auth/otp-verification";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Text } from "~/components/ui/text";
+import { Eye } from "~/lib/icons/eye";
+import { EyeOff } from "~/lib/icons/eye-off";
 import { Loader2 } from "~/lib/icons/loader-2";
 import { cn } from "~/lib/utils";
 
 const SignUpForm = () => {
   const { signUp, isLoaded } = useSignUp();
-  const router = useRouter();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [pendingVerification, setPendingVerification] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pendingVerification, setPendingVerification] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<SignUp>({
     resolver: zodResolver(SignUpSchema),
@@ -56,7 +54,7 @@ const SignUpForm = () => {
 
       // change the UI to our pending section
       setPendingVerification(true);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(JSON.stringify(err, null, 2));
     } finally {
       setIsLoading(false);
@@ -68,13 +66,13 @@ const SignUpForm = () => {
   };
 
   return (
-    <View className="flex-1 justify-center p-4">
-      <Text>Sign Up</Text>
+    <View className="flex-1 justify-center gap-8">
+      <Text className="text-3xl font-bold">Create account</Text>
 
       {!pendingVerification && (
-        <View className="flex-1 px-6">
+        <View className="flex-1 flex-col gap-12">
           <FormProvider {...form}>
-            <View className="flex flex-col gap-4">
+            <View className="flex flex-col gap-6">
               <Controller
                 control={form.control}
                 name="email"
@@ -82,27 +80,28 @@ const SignUpForm = () => {
                   field: { onChange, onBlur, value },
                   fieldState: { error },
                 }) => (
-                  <View>
+                  <View className="flex-col gap-2">
                     <Label
-                      className={cn(error && "text-destructive", "pb-2.5")}
+                      className={cn(error && "text-destructive")}
                       nativeID="emailLabel"
                     >
                       Email address
                     </Label>
                     <Input
-                      placeholder="Email"
+                      placeholder=""
                       value={value}
                       onChangeText={onChange}
                       onBlur={onBlur}
                       accessibilityLabel="Email address"
                       accessibilityLabelledBy="emailLabel"
                       autoCapitalize="none"
+                      className="native:h-14"
                     />
                     {error && (
                       <Animated.Text
                         entering={FadeInDown}
                         exiting={FadeOutUp.duration(275)}
-                        className="px-0.5 py-2 text-sm text-destructive"
+                        className="px-1 text-sm text-destructive"
                         role="alert"
                       >
                         {error.message}
@@ -119,28 +118,48 @@ const SignUpForm = () => {
                   field: { onChange, onBlur, value },
                   fieldState: { error },
                 }) => (
-                  <View>
+                  <View className="flex-col gap-2">
                     <Label
-                      className={cn(error && "text-destructive", "pb-2.5")}
+                      className={cn(error && "text-destructive")}
                       nativeID="passwordLabel"
                     >
                       Password
                     </Label>
-                    <Input
-                      placeholder="Password"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      accessibilityLabel="Password"
-                      accessibilityLabelledBy="passwordLabel"
-                      secureTextEntry
-                      autoCapitalize="none"
-                    />
+                    <View className="flex h-14 flex-row items-center gap-2">
+                      <Input
+                        placeholder=""
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        accessibilityLabel="Password"
+                        accessibilityLabelledBy="passwordLabel"
+                        secureTextEntry={!showPassword}
+                        className="native:h-full flex-1 pr-12"
+                      />
+                      <TouchableOpacity
+                        onPress={() => setShowPassword(!showPassword)}
+                        className="absolute right-0 px-3 py-3"
+                      >
+                        {showPassword ? (
+                          <EyeOff
+                            className="text-foreground"
+                            size={23}
+                            strokeWidth={1.25}
+                          />
+                        ) : (
+                          <Eye
+                            className="text-foreground"
+                            size={23}
+                            strokeWidth={1.25}
+                          />
+                        )}
+                      </TouchableOpacity>
+                    </View>
                     {error && (
                       <Animated.Text
                         entering={FadeInDown}
                         exiting={FadeOutUp.duration(275)}
-                        className="px-0.5 py-2 text-sm text-destructive"
+                        className="px-1 text-sm text-destructive"
                         role="alert"
                       >
                         {error.message}
@@ -152,8 +171,12 @@ const SignUpForm = () => {
             </View>
           </FormProvider>
 
-          <View className="px-12 pb-4">
-            <Button onPress={form.handleSubmit(onSubmit)}>
+          <View>
+            <Button
+              size={"lg"}
+              onPress={form.handleSubmit(onSubmit)}
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <View className="flex-row items-center justify-center gap-3">
                   <Loader2
@@ -163,17 +186,15 @@ const SignUpForm = () => {
                     className="animate-spin"
                   />
                   <Text className="text-xl font-medium text-primary-foreground">
-                    Submitting...
+                    Signing up...
                   </Text>
                 </View>
               ) : (
                 <Text className="text-xl font-medium text-primary-foreground">
-                  Submit
+                  Sign Up
                 </Text>
               )}
             </Button>
-
-            <Text>Already have an account?</Text>
           </View>
         </View>
       )}

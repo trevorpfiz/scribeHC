@@ -1,10 +1,8 @@
 import type { RefObject } from "react";
+import type { TextInput } from "react-native";
 import React, { useRef, useState } from "react";
 import {
   SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -13,14 +11,15 @@ import { useSignUp } from "@clerk/clerk-expo";
 
 import { OTPInput } from "~/components/auth/otp-input";
 import { Button } from "~/components/ui/button";
+import { Text } from "~/components/ui/text";
 import { Loader2 } from "~/lib/icons/loader-2";
 
 export const OTPVerification = (props: { onSuccess: () => void }) => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [codes, setCodes] = useState<string[]>(Array(6).fill(""));
-  const refs: RefObject<TextInput>[] = Array.from({ length: 6 }, () =>
-    useRef<TextInput>(null),
-  );
+  const refs: RefObject<TextInput>[] = useRef(
+    Array.from({ length: 6 }, () => React.createRef<TextInput>()),
+  ).current;
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState<string[] | undefined>();
 
@@ -29,27 +28,30 @@ export const OTPVerification = (props: { onSuccess: () => void }) => {
   }
 
   const onChangeCode = (text: string, index: number) => {
-    if (text.length > 1) {
-      setErrorMessages(undefined);
-      const newCodes = text.split("");
-      setCodes(newCodes);
-      refs[5]!.current?.focus();
-      return;
-    }
     setErrorMessages(undefined);
     const newCodes = [...codes];
-    newCodes[index] = text;
-    setCodes(newCodes);
-    if (text !== "" && index < 5) {
-      refs[index + 1]!.current?.focus();
+    if (text.length > 1) {
+      const splitCodes = text.split("");
+      splitCodes.forEach((code, i) => {
+        if (i < 6) {
+          newCodes[i] = code;
+        }
+      });
+      refs[5].current?.focus();
+    } else {
+      newCodes[index] = text;
+      if (text !== "" && index < 5) {
+        refs[index + 1].current?.focus();
+      }
     }
+    setCodes(newCodes);
   };
 
   const handleResendCode = async () => {
     if (!isLoaded) return;
     try {
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.log(err);
     }
   };
@@ -71,7 +73,8 @@ export const OTPVerification = (props: { onSuccess: () => void }) => {
 
       // handle verification success
       props.onSuccess();
-    } catch (err: any) {
+    } catch (err: unknown) {
+      setErrorMessages(err.errors?.[0]?.message || "Verification failed");
       console.log(err);
     } finally {
       setIsLoading(false);
@@ -79,16 +82,16 @@ export const OTPVerification = (props: { onSuccess: () => void }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-background">
       <TouchableWithoutFeedback>
-        <View style={styles.innerContainer}>
-          <Text style={styles.title}>Security code sent!</Text>
-          <Text style={styles.description}>
+        <View className="flex-1 items-center justify-center p-6">
+          <Text className="mb-4 text-2xl font-bold">Security code sent!</Text>
+          <Text className="mb-4 text-center">
             To continue, please enter the 6 digit verification code sent to the
             provided email.
           </Text>
           <TouchableOpacity onPress={handleResendCode}>
-            <Text style={styles.resendLink}>
+            <Text className="mb-6 underline">
               Didn't receive the code? Resend
             </Text>
           </TouchableOpacity>
@@ -98,27 +101,30 @@ export const OTPVerification = (props: { onSuccess: () => void }) => {
             onChangeCode={onChangeCode}
             refs={refs}
           />
-          <Button onPress={onPressVerify} style={styles.button}>
+          {errorMessages && (
+            <Text className="mt-2 text-sm text-destructive">
+              {errorMessages}
+            </Text>
+          )}
+          <Button onPress={onPressVerify} className="mt-6" disabled={isLoading}>
             {isLoading ? (
-              <View style={styles.loadingContainer}>
+              <View className="flex-row items-center justify-center gap-3">
                 <Loader2
                   size={24}
                   color="black"
                   strokeWidth={3}
                   className="animate-spin"
                 />
-                <Text style={styles.loadingText}>Verifying...</Text>
+                <Text className="text-xl font-medium">Verifying...</Text>
               </View>
             ) : (
-              <Text className="text-xl font-medium text-primary-foreground">
-                Continue
-              </Text>
+              <Text className="text-xl font-medium">Continue</Text>
             )}
           </Button>
-          <Text style={styles.footerText}>
-            By continuing, you agree to Unkey's{" "}
-            <Text style={styles.link}>Terms of Service</Text> and{" "}
-            <Text style={styles.link}>Privacy Policy</Text>, and to receive
+          <Text className="mt-6 text-center">
+            By continuing, you agree to scribeHH's{" "}
+            <Text className="underline">Terms of Service</Text> and{" "}
+            <Text className="underline">Privacy Policy</Text>, and to receive
             periodic emails with updates.
           </Text>
         </View>
@@ -126,56 +132,3 @@ export const OTPVerification = (props: { onSuccess: () => void }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
-  innerContainer: {
-    flex: 1,
-    padding: 16,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 16,
-  },
-  description: {
-    color: "#fff",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  resendLink: {
-    color: "#fff",
-    textDecorationLine: "underline",
-    marginBottom: 24,
-  },
-  button: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  loadingContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  loadingText: {
-    fontSize: 18,
-    color: "black",
-    marginLeft: 8,
-  },
-  footerText: {
-    color: "#fff",
-    textAlign: "center",
-    marginTop: 24,
-  },
-  link: {
-    textDecorationLine: "underline",
-  },
-});

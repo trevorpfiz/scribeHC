@@ -1,5 +1,6 @@
-import { Button } from "@hh/ui/button";
 import { Github } from "lucide-react";
+
+import { Button } from "@hh/ui/button";
 
 import { signInWithGithub } from "~/app/auth/actions";
 

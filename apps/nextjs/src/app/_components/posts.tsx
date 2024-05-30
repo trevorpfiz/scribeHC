@@ -1,8 +1,9 @@
 "use client";
 
-import type { RouterOutputs } from "@hh/api";
 import { use } from "react";
 import Image from "next/image";
+
+import type { RouterOutputs } from "@hh/api";
 import { CreatePostSchema } from "@hh/db/schema";
 import { cn } from "@hh/ui";
 import { Button } from "@hh/ui/button";

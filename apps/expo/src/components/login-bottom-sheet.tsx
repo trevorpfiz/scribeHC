@@ -1,3 +1,4 @@
+import type { BottomSheetBackgroundProps } from "@gorhom/bottom-sheet";
 import React, { useMemo, useRef } from "react";
 import Animated, {
   interpolateColor,
@@ -5,10 +6,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import BottomSheet, {
-  BottomSheetBackgroundProps,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
 import GoogleSvg from "~/components/svg/google-icon";
 import { Button } from "~/components/ui/button";
@@ -48,15 +46,19 @@ const LoginBottomSheet = () => {
       backgroundComponent={CustomBackground}
     >
       <BottomSheetView className="flex-1 gap-4 p-4">
-        <Button
-          variant="secondary"
-          size="lg"
-          className="flex-row items-center gap-2 rounded-xl bg-white"
-          textClassName="group-active:text-black"
-        >
-          <Ionicons name="logo-apple" size={20} />
-          <Text className="font-semibold text-black">Continue with Apple</Text>
-        </Button>
+        <Link href={{ pathname: "/toggle" }} asChild>
+          <Button
+            variant="secondary"
+            size="lg"
+            className="flex-row items-center gap-2 rounded-xl bg-white"
+            textClassName="group-active:text-black"
+          >
+            <Ionicons name="logo-apple" size={20} />
+            <Text className="font-semibold text-black">
+              Continue with Apple
+            </Text>
+          </Button>
+        </Link>
         <Button
           size="lg"
           className="flex-row items-center gap-2 rounded-xl bg-zinc-600"

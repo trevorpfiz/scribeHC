@@ -3,6 +3,8 @@ import { Button, Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
+import { X } from "~/lib/icons/x";
+
 export function AuthAvatar() {
   // const user = useUser();
   const router = useRouter();
@@ -45,5 +47,14 @@ export function HeaderTitle(props: { children: ReactNode }) {
     <Text className="text-3xl font-semibold text-zinc-200">
       {props.children}
     </Text>
+  );
+}
+
+export function HeaderCloseButton() {
+  const router = useRouter();
+  return (
+    <TouchableOpacity onPress={() => router.dismiss()}>
+      <X className="text-foreground" size={24} strokeWidth={1.5} />
+    </TouchableOpacity>
   );
 }
