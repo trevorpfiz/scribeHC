@@ -9,14 +9,13 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
 import { useSignUp } from "@clerk/clerk-expo";
-import { Loader2 } from "lucide-react-native";
 
 import { OTPInput } from "~/components/auth/otp-input";
 import { Button } from "~/components/ui/button";
+import { Loader2 } from "~/lib/icons/loader-2";
 
-export const OTPVerification = ({ email, onSuccess }) => {
+export const OTPVerification = (props: { onSuccess: () => void }) => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [codes, setCodes] = useState<string[]>(Array(6).fill(""));
   const refs: RefObject<TextInput>[] = Array.from({ length: 6 }, () =>
@@ -56,15 +55,22 @@ export const OTPVerification = ({ email, onSuccess }) => {
   };
 
   const onPressVerify = async () => {
-    if (!isLoaded) return;
+    if (!isLoaded) {
+      return;
+    }
 
     setIsLoading(true);
     try {
+      console.log("verifying", codes.join(""));
       const completeSignUp = await signUp.attemptEmailAddressVerification({
         code: codes.join(""),
       });
+      console.log("verified");
       await setActive({ session: completeSignUp.createdSessionId });
-      onSuccess();
+      console.log("active");
+
+      // handle verification success
+      props.onSuccess();
     } catch (err: any) {
       console.log(err);
     } finally {
@@ -104,7 +110,9 @@ export const OTPVerification = ({ email, onSuccess }) => {
                 <Text style={styles.loadingText}>Verifying...</Text>
               </View>
             ) : (
-              "Continue"
+              <Text className="text-xl font-medium text-primary-foreground">
+                Continue
+              </Text>
             )}
           </Button>
           <Text style={styles.footerText}>

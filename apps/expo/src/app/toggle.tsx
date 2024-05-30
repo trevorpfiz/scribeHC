@@ -5,6 +5,7 @@ import Animated, {
   FadeOutDown,
   LayoutAnimationConfig,
 } from "react-native-reanimated";
+import { SignedIn, useAuth } from "@clerk/clerk-expo";
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -34,8 +35,30 @@ export default function Screen() {
   function updateProgressValue() {
     setProgress(Math.floor(Math.random() * 100));
   }
+
+  const SignOut = () => {
+    const { isLoaded, signOut } = useAuth();
+    if (!isLoaded) {
+      return null;
+    }
+    return (
+      <View>
+        <Button
+          onPress={() => {
+            signOut();
+          }}
+        >
+          <Text>Sign Out</Text>
+        </Button>
+      </View>
+    );
+  };
+
   return (
     <View className="flex-1 items-center justify-center gap-5 bg-secondary/30 p-6">
+      <SignedIn>
+        <SignOut />
+      </SignedIn>
       <Card className="w-full max-w-sm rounded-2xl p-6">
         <CardHeader className="items-center">
           <Avatar alt="Rick Sanchez's Avatar" className="h-24 w-24">

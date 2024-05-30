@@ -50,7 +50,7 @@ const SignInForm = () => {
       console.log(err);
     }
 
-    router.push("/toggle");
+    setIsLoading(false);
   };
 
   return (
@@ -139,27 +139,30 @@ const SignInForm = () => {
             />
           </View>
         </FormProvider>
-      </View>
-      <View className="px-12 pb-4">
-        <Button onPress={form.handleSubmit(onSubmit)}>
-          {isLoading ? (
-            <View className="flex-row items-center justify-center gap-3">
-              <Loader2
-                size={24}
-                color="white"
-                strokeWidth={3}
-                className="animate-spin"
-              />
+
+        <View className="px-12 pb-4">
+          <Button onPress={form.handleSubmit(onSubmit)}>
+            {isLoading ? (
+              <View className="flex-row items-center justify-center gap-3">
+                <Loader2
+                  size={24}
+                  color="white"
+                  strokeWidth={3}
+                  className="animate-spin"
+                />
+                <Text className="text-xl font-medium text-primary-foreground">
+                  Submitting...
+                </Text>
+              </View>
+            ) : (
               <Text className="text-xl font-medium text-primary-foreground">
-                Submitting...
+                Submit
               </Text>
-            </View>
-          ) : (
-            <Text className="text-xl font-medium text-primary-foreground">
-              Submit
-            </Text>
-          )}
-        </Button>
+            )}
+          </Button>
+
+          <Text>Reset your password?</Text>
+        </View>
       </View>
     </View>
   );

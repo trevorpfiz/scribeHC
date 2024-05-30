@@ -26,7 +26,6 @@ const SignUpForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
   const [pendingVerification, setPendingVerification] = React.useState(false);
-  const [email, setEmail] = React.useState("");
 
   const form = useForm<SignUp>({
     resolver: zodResolver(SignUpSchema),
@@ -37,7 +36,9 @@ const SignUpForm = () => {
   });
 
   const onSubmit: SubmitHandler<SignUp> = async (data) => {
-    if (!isLoaded) return;
+    if (!isLoaded) {
+      return;
+    }
 
     setIsLoading(true);
     try {
@@ -46,20 +47,24 @@ const SignUpForm = () => {
         password: data.password,
       });
 
+      console.log("signup create done");
+
       // Send the email for verification
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
 
-      setEmail(data.email);
+      console.log("signup email sent");
+
+      // change the UI to our pending section
       setPendingVerification(true);
     } catch (err: any) {
-      console.log(err);
+      console.error(JSON.stringify(err, null, 2));
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleVerificationSuccess = () => {
-    router.push("/toggle");
+    console.log("handleVerificationSuccess");
   };
 
   return (
@@ -146,6 +151,7 @@ const SignUpForm = () => {
               />
             </View>
           </FormProvider>
+
           <View className="px-12 pb-4">
             <Button onPress={form.handleSubmit(onSubmit)}>
               {isLoading ? (
@@ -166,12 +172,14 @@ const SignUpForm = () => {
                 </Text>
               )}
             </Button>
+
+            <Text>Already have an account?</Text>
           </View>
         </View>
       )}
 
       {pendingVerification && (
-        <OTPVerification email={email} onSuccess={handleVerificationSuccess} />
+        <OTPVerification onSuccess={handleVerificationSuccess} />
       )}
     </View>
   );

@@ -49,12 +49,21 @@ const InitialLayout = () => {
   const segments = useSegments();
 
   useEffect(() => {
-    if (!isLoaded) return;
+    if (!isLoaded) {
+      return;
+    }
 
     const inAuthGroup = segments[0] === "(auth)";
 
+    console.log("inAuthGroup", inAuthGroup, "isSignedIn", isSignedIn);
+
     if (isSignedIn && !inAuthGroup) {
-      router.replace("/(auth)/(drawer)/(chat)/new");
+      console.log("replace", isSignedIn);
+
+      if (router.canDismiss()) {
+        router.dismiss();
+      }
+      router.replace("/toggle");
     } else if (!isSignedIn) {
       router.replace("/");
     }

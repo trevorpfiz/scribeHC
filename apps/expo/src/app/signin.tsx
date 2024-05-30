@@ -4,7 +4,7 @@ import { SignInForm } from "~/components/auth/signin-form";
 import { useSoftKeyboardEffect } from "~/lib/keyboard";
 
 export default function SignInScreen() {
-  useSoftKeyboardEffect();
+  // useSoftKeyboardEffect();
 
   return (
     <>
