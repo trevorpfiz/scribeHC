@@ -8,10 +8,19 @@ const Label = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Text>
 >(
   (
-    { className, onPress, onLongPress, onPressIn, onPressOut, ...props },
+    {
+      className,
+      onPress,
+      onLongPress,
+      onPressIn,
+      onPressOut,
+      testID,
+      ...props
+    },
     ref,
   ) => (
     <LabelPrimitive.Root
+      testID={testID ? `${testID}-label-pressable` : undefined}
       className="web:cursor-default"
       onPress={onPress}
       onLongPress={onLongPress}
@@ -19,6 +28,7 @@ const Label = React.forwardRef<
       onPressOut={onPressOut}
     >
       <LabelPrimitive.Text
+        testID={testID ? `${testID}-label-text` : undefined}
         ref={ref}
         className={cn(
           "native:text-base web:peer-disabled:cursor-not-allowed web:peer-disabled:opacity-70 text-sm font-medium leading-none text-foreground",

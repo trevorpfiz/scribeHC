@@ -8,7 +8,7 @@ import { Link } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 
-import GoogleSvg from "~/components/svg/google-icon";
+import { ContinueWithOAuth } from "~/components/auth/continue-with-oauth";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 
@@ -46,26 +46,8 @@ const LoginBottomSheet = () => {
       backgroundComponent={CustomBackground}
     >
       <BottomSheetView className="flex-1 gap-4 p-4">
-        <Link href={{ pathname: "/toggle" }} asChild>
-          <Button
-            variant="secondary"
-            size="lg"
-            className="flex-row items-center gap-2 rounded-xl bg-white"
-            textClassName="group-active:text-black"
-          >
-            <Ionicons name="logo-apple" size={20} />
-            <Text className="font-semibold text-black">
-              Continue with Apple
-            </Text>
-          </Button>
-        </Link>
-        <Button
-          size="lg"
-          className="flex-row items-center gap-2 rounded-xl bg-zinc-600"
-        >
-          <GoogleSvg size={20} />
-          <Text className="font-semibold text-white">Continue with Google</Text>
-        </Button>
+        <ContinueWithOAuth provider="apple" />
+        <ContinueWithOAuth provider="google" />
         <Link href={{ pathname: "/signup" }} asChild>
           <Button
             size="lg"
