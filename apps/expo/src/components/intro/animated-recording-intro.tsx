@@ -1,8 +1,10 @@
-import { memo } from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
+// AnimatedIntro.js
+import { memo, useEffect } from "react";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
+  runOnJS,
   useAnimatedReaction,
   useAnimatedStyle,
   useDerivedValue,
@@ -12,6 +14,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { ReText } from "react-native-redash";
 import colors from "tailwindcss/colors";
+
+import { useAnimationStore } from "~/stores/animationStore";
+import FanOutBallsAnimation from "./fanning";
 
 const content = [
   {
@@ -42,8 +47,12 @@ const content = [
 ];
 
 const AnimatedIntro = () => {
+  const isFanningOut = useAnimationStore((state) => state.isFanningOut);
+  const setFanningOut = useAnimationStore((state) => state.setFanningOut);
+  const setBallColor = useAnimationStore((state) => state.setBallColor);
+
   const { width } = useWindowDimensions();
-  const ballWidth = 34;
+  const ballWidth = 40;
   const half = width / 2 - ballWidth / 2;
 
   const currentX = useSharedValue(half);
@@ -51,7 +60,6 @@ const AnimatedIntro = () => {
   const isAtStart = useSharedValue(true);
   const labelWidth = useSharedValue(0);
   const canGoToNext = useSharedValue(false);
-  const didPlay = useSharedValue(false);
 
   const newColorIndex = useDerivedValue(() => {
     if (!isAtStart.value) {
@@ -142,7 +150,7 @@ const AnimatedIntro = () => {
     () => labelWidth.value,
     (newWidth) => {
       currentX.value = withDelay(
-        1000,
+        800,
         withTiming(
           half + newWidth / 2,
           {
@@ -176,7 +184,8 @@ const AnimatedIntro = () => {
               if (finished) {
                 currentIndex.value = (currentIndex.value + 1) % content.length;
                 isAtStart.value = true;
-                didPlay.value = false;
+                runOnJS(setBallColor)(content[currentIndex.value].fontColor); // Set the ball color
+                runOnJS(setFanningOut)(true); // Trigger fan out animation
               }
             },
           ),
@@ -186,18 +195,29 @@ const AnimatedIntro = () => {
     [currentX, labelWidth],
   );
 
+  const handleFanOutComplete = () => {
+    setFanningOut(false);
+    canGoToNext.value = true; // Continue the cycle
+  };
+
   return (
     <Animated.View style={[styles.wrapper, style1]}>
       <Animated.View style={[styles.content]}>
-        <Animated.View style={[styles.ball, ballStyle]} />
-        <Animated.View style={[styles.mask, mask]} />
-        <ReText
-          onLayout={(e) => {
-            labelWidth.value = e.nativeEvent.layout.width + 4;
-          }}
-          style={[styles.title, textStyle]}
-          text={text}
-        />
+        {isFanningOut ? (
+          <FanOutBallsAnimation onFanOutComplete={handleFanOutComplete} />
+        ) : (
+          <>
+            <Animated.View style={[styles.ball, ballStyle]} />
+            <Animated.View style={[styles.mask, mask]} />
+            <ReText
+              onLayout={(e) => {
+                labelWidth.value = e.nativeEvent.layout.width + 4;
+              }}
+              style={[styles.title, textStyle]}
+              text={text}
+            />
+          </>
+        )}
       </Animated.View>
     </Animated.View>
   );
@@ -206,6 +226,8 @@ const AnimatedIntro = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    justifyContent: "center",
+    paddingBottom: 292,
   },
   mask: {
     zIndex: 1,
@@ -215,10 +237,10 @@ const styles = StyleSheet.create({
   },
   ball: {
     width: 40,
-    zIndex: 10,
     height: 40,
-    backgroundColor: "#000",
-    borderRadius: 20,
+    backgroundColor: colors.black,
+    borderRadius: 9999,
+    zIndex: 10,
     position: "absolute",
     left: "0%",
   },
@@ -232,7 +254,11 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   content: {
-    marginTop: 300,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
   },
 });
+
 export default memo(AnimatedIntro);

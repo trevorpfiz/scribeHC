@@ -9,14 +9,6 @@
       "path": "../apps/expo",
     },
     {
-      "name": "tRPC",
-      "path": "../packages/api",
-    },
-    {
-      "name": "db",
-      "path": "../packages/db",
-    },
-    {
       "name": "Root",
       "path": "../",
     },
