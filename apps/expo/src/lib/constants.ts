@@ -1,3 +1,5 @@
+import colors from "tailwindcss/colors";
+
 export const NAV_THEME = {
   light: {
     background: "hsl(0 0% 100%)", // background
@@ -16,3 +18,31 @@ export const NAV_THEME = {
     text: "hsl(0 0% 98%)", // foreground
   },
 };
+
+export const INTRO_CONTENT = [
+  {
+    title: "Let's create.",
+    bg: colors.lime[100],
+    fontColor: colors.pink[500],
+  },
+  {
+    title: "Let's brainstorm.",
+    bg: colors.stone[900],
+    fontColor: colors.sky[200],
+  },
+  {
+    title: "Let's discover.",
+    bg: colors.orange[500],
+    fontColor: colors.blue[700],
+  },
+  {
+    title: "Let's go.",
+    bg: colors.teal[700],
+    fontColor: colors.yellow[400],
+  },
+  {
+    title: "ChatGPT.",
+    bg: colors.green[800],
+    fontColor: colors.pink[500],
+  },
+];
