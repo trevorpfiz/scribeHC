@@ -9,7 +9,7 @@ const config = {
   reactStrictMode: true,
 
   /** Enables hot reloading for local packages without a build step */
-  transpilePackages: ["@hh/api", "@hh/db", "@hh/ui", "@hh/validators"],
+  transpilePackages: ["@shc/api", "@shc/db", "@shc/ui", "@shc/validators"],
 
   // Allow optimizing avatar images from GitHub
   images: {

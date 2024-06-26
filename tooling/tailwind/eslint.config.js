@@ -1,6 +1,6 @@
 // FIXME: This kinda stinks...
 /// <reference types="../../tooling/eslint/types.d.ts" />
 
-import baseConfig from "@hh/eslint-config/base";
+import baseConfig from "@shc/eslint-config/base";
 
 export default [...baseConfig];

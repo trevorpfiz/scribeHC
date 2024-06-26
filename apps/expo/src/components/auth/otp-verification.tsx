@@ -122,7 +122,7 @@ export const OTPVerification = (props: { onSuccess: () => void }) => {
             )}
           </Button>
           <Text className="mt-6 text-center">
-            By continuing, you agree to scribeHH's{" "}
+            By continuing, you agree to scribeHC's{" "}
             <Text className="underline">Terms of Service</Text> and{" "}
             <Text className="underline">Privacy Policy</Text>, and to receive
             periodic emails with updates.

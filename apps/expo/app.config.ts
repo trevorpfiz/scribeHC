@@ -2,8 +2,8 @@ import type { ConfigContext, ExpoConfig } from "@expo/config";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "scribeHH",
-  slug: "scribehh",
+  name: "scribeHC",
+  slug: "scribehc",
   scheme: "expo",
   version: "0.1.0",
   orientation: "portrait",
@@ -19,7 +19,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    bundleIdentifier: "com.scribehh.app",
+    bundleIdentifier: "com.scribehc.app",
     supportsTablet: true,
     usesAppleSignIn: true,
     config: {
@@ -27,7 +27,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   android: {
-    package: "com.scribehh.app",
+    package: "com.scribehc.app",
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#18181A",
@@ -47,10 +47,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       origin: false,
     },
     eas: {
-      projectId: "4c79936e-b351-4bc9-93bb-390f20e4364f",
+      projectId: "bd3c6023-6da8-4e0d-8a0a-16c6eabd4cb7",
     },
   },
-  owner: "scribe-hh",
+  owner: "scribe-hc",
   plugins: [
     "expo-router",
     "expo-secure-store",
@@ -69,6 +69,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ios: {
           deploymentTarget: "15.0",
         },
+      },
+    ],
+    [
+      "expo-av",
+      {
+        microphonePermission:
+          "Allow $(PRODUCT_NAME) to access your microphone.",
       },
     ],
   ],

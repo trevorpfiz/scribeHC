@@ -29,7 +29,7 @@ const ContinueWithOAuth = (props: { provider: "apple" | "google" }) => {
   const onPress = React.useCallback(async () => {
     try {
       const { createdSessionId, setActive } = await startOAuthFlow({
-        redirectUrl: Linking.createURL("/toggle"),
+        redirectUrl: Linking.createURL("/(app)/dashboard"),
       });
 
       if (createdSessionId) {

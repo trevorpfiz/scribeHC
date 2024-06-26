@@ -1,4 +1,4 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@hh/ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "@shc/ui/card";
 
 import { BackButton } from "~/app/auth/_components/back-button";
 import { Header } from "~/app/auth/_components/header";

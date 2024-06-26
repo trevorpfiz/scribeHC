@@ -1,4 +1,4 @@
-import { Button } from "@hh/ui/button";
+import { Button } from "@shc/ui/button";
 
 import { signOut } from "~/app/auth/actions";
 

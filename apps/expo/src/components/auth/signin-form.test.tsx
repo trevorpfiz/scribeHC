@@ -14,7 +14,7 @@ const defaultProps: SignInFormProps = {
 describe("SignInForm", () => {
   it("renders correctly", async () => {
     render(<SignInForm {...defaultProps} />);
-    expect(await screen.findByText(/Sign In to scribeHH/i)).toBeOnTheScreen();
+    expect(await screen.findByText(/Sign In to scribeHC/i)).toBeOnTheScreen();
   });
 
   it("should display required error when values are empty", async () => {

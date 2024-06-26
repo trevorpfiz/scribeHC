@@ -20,7 +20,6 @@ import { ThemeProvider } from "@react-navigation/native";
 // import * as SystemUI from "expo-system-ui";
 
 import { HeaderCloseButton } from "~/components/header";
-import { ThemeToggle } from "~/components/theme-toggle";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/use-color-scheme";
@@ -69,7 +68,7 @@ const InitialLayout = () => {
       if (router.canDismiss()) {
         router.dismiss();
       }
-      router.replace("/toggle");
+      router.replace("/(app)/dashboard");
     } else if (!isSignedIn) {
       router.replace("/");
     }
@@ -85,13 +84,6 @@ const InitialLayout = () => {
         name="index"
         options={{
           headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="toggle"
-        options={{
-          title: "Starter Base",
-          headerRight: () => <ThemeToggle />,
         }}
       />
       <Stack.Screen
@@ -121,7 +113,7 @@ const InitialLayout = () => {
           headerLeft: HeaderCloseButton,
         }}
       />
-      {/* <Stack.Screen name="(app)" options={{ headerShown: false }} /> */}
+      <Stack.Screen name="(app)" options={{ headerShown: false }} />
     </Stack>
   );
 };

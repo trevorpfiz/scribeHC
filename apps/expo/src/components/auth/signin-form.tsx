@@ -1,13 +1,12 @@
+import type { SignIn } from "@shc/validators";
 import type { SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { Link } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SignInSchema } from "@shc/validators";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-
-import type { SignIn } from "@hh/validators";
-import { SignInSchema } from "@hh/validators";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -37,7 +36,7 @@ const SignInForm = ({ onSubmit = () => {}, isLoading }: SignInFormProps) => {
   return (
     <View className="flex-1 justify-center gap-8">
       <Text testID="form-title" className="text-3xl font-bold">
-        Sign In to scribeHH
+        Sign In to scribeHC
       </Text>
 
       <View className="flex-1 flex-col gap-8">

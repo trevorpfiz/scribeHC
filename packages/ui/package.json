@@ -1,5 +1,5 @@
 {
-  "name": "@hh/ui",
+  "name": "@shc/ui",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -33,10 +33,10 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@hh/eslint-config": "workspace:*",
-    "@hh/prettier-config": "workspace:*",
-    "@hh/tailwind-config": "workspace:*",
-    "@hh/tsconfig": "workspace:*",
+    "@shc/eslint-config": "workspace:*",
+    "@shc/prettier-config": "workspace:*",
+    "@shc/tailwind-config": "workspace:*",
+    "@shc/tsconfig": "workspace:*",
     "@types/react": "^18.3.2",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",
@@ -49,5 +49,5 @@
     "react": "18.3.1",
     "zod": "^3.23.6"
   },
-  "prettier": "@hh/prettier-config"
+  "prettier": "@shc/prettier-config"
 }

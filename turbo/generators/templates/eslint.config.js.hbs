@@ -1,4 +1,4 @@
-import baseConfig from "@hh/eslint-config/base";
+import baseConfig from "@shc/eslint-config/base";
 
 /** @type {import('typescript-eslint').Config} */
 export default [
