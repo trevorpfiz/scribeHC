@@ -10,5 +10,5 @@ export default {
   out: "./migrations",
   dialect: "postgresql",
   dbCredentials: { url: nonPoolingUrl },
-  tablesFilter: ["t3turbo_*"],
+  tablesFilter: ["scribeHC_*"],
 } satisfies Config;

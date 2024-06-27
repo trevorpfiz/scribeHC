@@ -9,12 +9,20 @@
       "path": "../apps/expo",
     },
     {
+      "name": "FastAPI",
+      "path": "../apps/fastapi",
+    },
+    {
       "name": "Root",
       "path": "../",
     },
   ],
   "extensions": {
-    "recommendations": ["joshx.workspace-terminals"],
+    "recommendations": [
+      "joshx.workspace-terminals",
+      "teticio.python-envy",
+      "charliermarsh.ruff",
+    ],
   },
   "settings": {
     "search.useIgnoreFiles": true,
@@ -26,9 +34,13 @@
     "configurations": [],
     "compounds": [
       {
-        "name": "Launch Next.js and Expo",
-        // from apps/nextjs/.vscode/launch.json and apps/expo/.vscode/launch.json
-        "configurations": ["Debug Next.js", "Debug Expo app"],
+        "name": "Launch Next.js, Expo, and FastAPI",
+        // from apps/nextjs/.vscode/launch.json, apps/expo/.vscode/launch.json, and apps/fastapi/.vscode/launch.json
+        "configurations": [
+          "Debug Next.js",
+          "Debug Expo app",
+          "Python: FastAPI",
+        ],
       },
     ],
   },

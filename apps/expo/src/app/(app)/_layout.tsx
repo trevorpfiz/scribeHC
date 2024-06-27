@@ -16,7 +16,7 @@ const Layout = () => {
         name="record"
         options={{
           title: "Record",
-          headerRight: () => <ThemeToggle />,
+          headerShown: false,
         }}
       />
       <Stack.Screen

@@ -21,7 +21,7 @@
   "dependencies": {
     "@shc/db": "workspace:*",
     "@shc/validators": "workspace:*",
-    "@supabase/supabase-js": "^2.43.1",
+    "@supabase/supabase-js": "^2.44.0",
     "@trpc/server": "11.0.0-rc.364",
     "nanoid": "^5.0.7",
     "superjson": "2.2.1",

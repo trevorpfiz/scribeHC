@@ -1,8 +1,9 @@
 import { cache } from "react";
 import { headers } from "next/headers";
-import { createCaller, createTRPCContext } from "@shc/api";
+import { NextRequest } from "next/server";
+import { getAuth } from "@clerk/nextjs/server";
 
-import { createClient } from "~/utils/supabase/server";
+import { createCaller, createTRPCContext } from "@shc/api";
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
@@ -12,11 +13,11 @@ const createContext = cache(async () => {
   const heads = new Headers(headers());
   heads.set("x-trpc-source", "rsc");
 
-  const supabase = createClient();
-
   return createTRPCContext({
-    supabase,
     headers: heads,
+    auth: getAuth(
+      new NextRequest("https://notused.com", { headers: headers() }),
+    ),
   });
 });
 

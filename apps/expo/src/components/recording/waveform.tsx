@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
   interpolate,
-  runOnUI,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
-    width: 200,
+    width: 300,
     justifyContent: "center",
     alignItems: "center",
   },

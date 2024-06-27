@@ -6,11 +6,15 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { db } from "@shc/db/client";
+import type { getAuth } from "@clerk/nextjs/server";
+import { verifyToken } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+
+import { db } from "@shc/db/client";
+
+type AuthObject = ReturnType<typeof getAuth>;
 
 /**
  * 1. CONTEXT
@@ -26,23 +30,28 @@ import { ZodError } from "zod";
  */
 export const createTRPCContext = async (opts: {
   headers: Headers;
-  supabase: SupabaseClient;
+  auth: AuthObject;
 }) => {
-  const supabase = opts.supabase;
-
   // React Native will pass their token through headers,
   // browsers will have the session cookie set
-  const token = opts.headers.get("authorization");
+  const authToken = opts.headers.get("Authorization");
 
-  const user = token
-    ? await supabase.auth.getUser(token)
-    : await supabase.auth.getUser();
+  let userId: string | null = null;
+
+  if (authToken) {
+    const verifiedToken = await verifyToken(authToken, {
+      jwtKey: process.env.CLERK_JWT_KEY,
+    });
+    userId = verifiedToken.sub;
+  } else {
+    userId = opts.auth.userId;
+  }
 
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
-  console.log(">>> tRPC Request from", source, "by", user.data.user?.email);
+  console.log(">>> tRPC Request from", source, "by", userId);
 
   return {
-    user: user.data.user,
+    userId,
     db,
   };
 };
@@ -101,13 +110,12 @@ export const publicProcedure = t.procedure;
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.user?.id) {
+  if (!ctx.userId) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({
     ctx: {
-      // infers the `user` as non-nullable
-      user: ctx.user,
+      userId: ctx.userId,
     },
   });
 });
