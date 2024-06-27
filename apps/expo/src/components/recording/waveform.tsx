@@ -21,8 +21,7 @@ const WaveformAnimation: React.FC<{ metering: SharedValue<number> }> = ({
   const initialOffset = 0;
   const finalOffsets = [-90, -30, 30, 90]; // 4 balls 60px apart
 
-  // Shared value for the horizontal offset
-  const offset = useSharedValue(initialOffset);
+  const offset = useSharedValue(initialOffset); // horizontal offset
 
   useEffect(() => {
     offset.value = withSequence(
@@ -50,10 +49,12 @@ const WaveformAnimation: React.FC<{ metering: SharedValue<number> }> = ({
   // Styles for each ball
   const ballStyles = finalOffsets.map((finalOffset, index) =>
     useAnimatedStyle(() => {
+      const ballHeight = ballHeights[index]?.value ?? ballSize;
+
       return {
         transform: [{ translateX: offset.value * finalOffset }],
         backgroundColor: "black",
-        height: ballHeights[index].value,
+        height: ballHeight,
         width: ballSize,
         borderRadius: ballSize / 2,
       };

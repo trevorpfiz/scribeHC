@@ -21,27 +21,27 @@ export const NAV_THEME = {
 
 export const INTRO_CONTENT = [
   {
-    title: "Let's create.",
+    title: "scribeHC",
     bg: colors.lime[100],
     fontColor: colors.pink[500],
   },
   {
-    title: "Let's brainstorm.",
+    title: "scribeHC",
     bg: colors.stone[900],
     fontColor: colors.sky[200],
   },
   {
-    title: "Let's discover.",
+    title: "scribeHC",
     bg: colors.orange[500],
     fontColor: colors.blue[700],
   },
   {
-    title: "Let's go.",
+    title: "scribeHC",
     bg: colors.teal[700],
     fontColor: colors.yellow[400],
   },
   {
-    title: "ChatGPT.",
+    title: "scribeHC",
     bg: colors.green[800],
     fontColor: colors.pink[500],
   },

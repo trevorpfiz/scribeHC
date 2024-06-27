@@ -3,6 +3,7 @@ import { StyleSheet, useWindowDimensions } from "react-native";
 import Animated, {
   interpolate,
   interpolateColor,
+  runOnJS,
   useAnimatedReaction,
   useAnimatedStyle,
   useDerivedValue,
@@ -11,51 +12,28 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import { ReText } from "react-native-redash";
-import colors from "tailwindcss/colors";
 
-const content = [
-  {
-    title: "Let's create.",
-    bg: colors.lime[100],
-    fontColor: colors.pink[500],
-  },
-  {
-    title: "Let's brainstorm.",
-    bg: colors.stone[900],
-    fontColor: colors.sky[200],
-  },
-  {
-    title: "Let's discover.",
-    bg: colors.orange[500],
-    fontColor: colors.blue[700],
-  },
-  {
-    title: "Let's go.",
-    bg: colors.teal[700],
-    fontColor: colors.yellow[400],
-  },
-  {
-    title: "ChatGPT.",
-    bg: colors.green[800],
-    fontColor: colors.pink[500],
-  },
-];
+import WaveformIntroAnimation from "~/components/intro/waveform-intro-animation";
+import { INTRO_CONTENT } from "~/lib/constants";
+import { useAnimationStore } from "~/stores/animationStore";
 
 const AnimatedIntro = () => {
+  const isFanningOut = useAnimationStore((state) => state.isFanningOut);
+  const setFanningOut = useAnimationStore((state) => state.setFanningOut);
+
   const { width } = useWindowDimensions();
-  const ballWidth = 34;
+  const ballWidth = 40;
   const half = width / 2 - ballWidth / 2;
 
   const currentX = useSharedValue(half);
+  const labelWidth = useSharedValue(0);
   const currentIndex = useSharedValue(0);
   const isAtStart = useSharedValue(true);
-  const labelWidth = useSharedValue(0);
   const canGoToNext = useSharedValue(false);
-  const didPlay = useSharedValue(false);
 
   const newColorIndex = useDerivedValue(() => {
     if (!isAtStart.value) {
-      return (currentIndex.value + 1) % content.length;
+      return (currentIndex.value + 1) % INTRO_CONTENT.length;
     }
     return currentIndex.value;
   }, [currentIndex]);
@@ -66,8 +44,8 @@ const AnimatedIntro = () => {
         currentX.value,
         [half, half + labelWidth.value / 2],
         [
-          content[newColorIndex.value].fontColor,
-          content[currentIndex.value].fontColor,
+          INTRO_CONTENT[newColorIndex.value]!.fontColor,
+          INTRO_CONTENT[currentIndex.value]!.fontColor,
         ],
         "RGB",
       ),
@@ -81,7 +59,7 @@ const AnimatedIntro = () => {
         },
       ],
     };
-  }, [currentIndex, currentX]);
+  }, [currentIndex, currentX, newColorIndex]);
 
   const ballStyle = useAnimatedStyle(() => {
     return {
@@ -89,8 +67,8 @@ const AnimatedIntro = () => {
         currentX.value,
         [half, half + labelWidth.value / 2],
         [
-          content[newColorIndex.value].fontColor,
-          content[currentIndex.value].fontColor,
+          INTRO_CONTENT[newColorIndex.value]!.fontColor,
+          INTRO_CONTENT[currentIndex.value]!.fontColor,
         ],
         "RGB",
       ),
@@ -103,7 +81,10 @@ const AnimatedIntro = () => {
       backgroundColor: interpolateColor(
         currentX.value,
         [half, half + labelWidth.value / 2],
-        [content[newColorIndex.value].bg, content[currentIndex.value].bg],
+        [
+          INTRO_CONTENT[newColorIndex.value]!.bg,
+          INTRO_CONTENT[currentIndex.value]!.bg,
+        ],
         "RGB",
       ),
       transform: [{ translateX: currentX.value }],
@@ -118,7 +99,10 @@ const AnimatedIntro = () => {
     backgroundColor: interpolateColor(
       currentX.value,
       [half, half + labelWidth.value / 2],
-      [content[newColorIndex.value].bg, content[currentIndex.value].bg],
+      [
+        INTRO_CONTENT[newColorIndex.value]!.bg,
+        INTRO_CONTENT[currentIndex.value]!.bg,
+      ],
       "RGB",
     ),
     opacity: interpolate(1, [1, 0], [1, 0, 0, 0, 0, 0, 0]),
@@ -134,15 +118,14 @@ const AnimatedIntro = () => {
   }));
 
   const text = useDerivedValue(() => {
-    const index = currentIndex.value;
-    return content[index].title;
+    return INTRO_CONTENT[currentIndex.value]!.title;
   }, [currentIndex]);
 
   useAnimatedReaction(
     () => labelWidth.value,
     (newWidth) => {
       currentX.value = withDelay(
-        1000,
+        800,
         withTiming(
           half + newWidth / 2,
           {
@@ -166,7 +149,7 @@ const AnimatedIntro = () => {
       if (next) {
         canGoToNext.value = false;
         currentX.value = withDelay(
-          1000,
+          800,
           withTiming(
             half,
             {
@@ -174,9 +157,10 @@ const AnimatedIntro = () => {
             },
             (finished) => {
               if (finished) {
-                currentIndex.value = (currentIndex.value + 1) % content.length;
+                currentIndex.value =
+                  (currentIndex.value + 1) % INTRO_CONTENT.length;
                 isAtStart.value = true;
-                didPlay.value = false;
+                runOnJS(setFanningOut)(true); // Trigger fan out animation
               }
             },
           ),
@@ -186,18 +170,38 @@ const AnimatedIntro = () => {
     [currentX, labelWidth],
   );
 
+  const handleColorChange = () => {
+    // currentIndex.value = (currentIndex.value + 1) % INTRO_CONTENT.length;
+  };
+
+  const handleFanOutComplete = () => {
+    setFanningOut(false);
+    // canGoToNext.value = true; // Continue the cycle
+  };
+
   return (
     <Animated.View style={[styles.wrapper, style1]}>
       <Animated.View style={[styles.content]}>
-        <Animated.View style={[styles.ball, ballStyle]} />
-        <Animated.View style={[styles.mask, mask]} />
-        <ReText
-          onLayout={(e) => {
-            labelWidth.value = e.nativeEvent.layout.width + 4;
-          }}
-          style={[styles.title, textStyle]}
-          text={text}
-        />
+        {isFanningOut ? (
+          <WaveformIntroAnimation
+            handleColorChange={handleColorChange}
+            onFanOutComplete={handleFanOutComplete}
+            currentIndex={currentIndex}
+            newColorIndex={newColorIndex}
+          />
+        ) : (
+          <>
+            <Animated.View style={[styles.ball, ballStyle]} />
+            <Animated.View style={[styles.mask, mask]} />
+            <ReText
+              onLayout={(e) => {
+                labelWidth.value = e.nativeEvent.layout.width + 4;
+              }}
+              style={[styles.title, textStyle]}
+              text={text}
+            />
+          </>
+        )}
       </Animated.View>
     </Animated.View>
   );
@@ -206,6 +210,8 @@ const AnimatedIntro = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    justifyContent: "center",
+    paddingBottom: 292,
   },
   mask: {
     zIndex: 1,
@@ -215,10 +221,10 @@ const styles = StyleSheet.create({
   },
   ball: {
     width: 40,
-    zIndex: 10,
     height: 40,
     backgroundColor: "#000",
-    borderRadius: 20,
+    borderRadius: 9999,
+    zIndex: 10,
     position: "absolute",
     left: "0%",
   },
@@ -232,7 +238,11 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   content: {
-    marginTop: 300,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
   },
 });
+
 export default memo(AnimatedIntro);

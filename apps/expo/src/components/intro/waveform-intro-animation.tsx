@@ -1,9 +1,9 @@
 import type { DerivedValue, SharedValue } from "react-native-reanimated";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
+  interpolate,
   interpolateColor,
-  runOnUI,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -16,7 +16,7 @@ import Animated, {
 
 import { INTRO_CONTENT } from "~/lib/constants";
 
-const FanOutBallsAnimation: React.FC<{
+const WaveformIntroAnimation: React.FC<{
   handleColorChange: () => void;
   onFanOutComplete: () => void;
   currentIndex: SharedValue<number>;
@@ -26,12 +26,11 @@ const FanOutBallsAnimation: React.FC<{
   const initialOffset = 0;
   const finalOffsets = [-90, -30, 30, 90]; // 4 balls 60px apart
 
+  const offset = useSharedValue(initialOffset); // horizontal offset
   const isFanningOut = useSharedValue(true);
-  const isHeightChanging = useSharedValue(false);
   const volume = useSharedValue(0);
 
-  // Shared value for the horizontal offset
-  const offset = useSharedValue(initialOffset);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   // Function to toggle the offset between initial and final states
   useEffect(() => {
@@ -44,15 +43,10 @@ const FanOutBallsAnimation: React.FC<{
         withTiming(0, { duration: 1000 }),
       );
       setTimeout(() => {
-        runOnUI(() => {
-          isHeightChanging.value = true;
-        })();
+        setIsGenerating(true);
       }, 1800); // Start height change at the 2-second mark
       setTimeout(() => {
-        runOnUI(() => {
-          volume.value = 0;
-          isHeightChanging.value = false;
-        })();
+        setIsGenerating(false);
         handleColorChange();
       }, 3800);
       setTimeout(() => {
@@ -61,26 +55,30 @@ const FanOutBallsAnimation: React.FC<{
     }
   }, [isFanningOut, offset, onFanOutComplete]);
 
-  // Function to update the volume randomly
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (isHeightChanging.value) {
-        runOnUI(() => {
-          volume.value = Math.random() * 100;
-        })();
-      }
-    }, 150);
+    let interval: NodeJS.Timeout;
+
+    if (isGenerating) {
+      interval = setInterval(() => {
+        const randomNum = Math.random() * 100;
+        volume.value = randomNum;
+      }, 150);
+    } else {
+      volume.value = 0;
+    }
+
     return () => clearInterval(interval);
-  }, [volume.value, isHeightChanging.value]);
+  }, [isGenerating]);
 
   // Shared values for ball heights based on volume
   const ballHeights = finalOffsets.map((_, index) => {
     const min = 40;
-    const max = 150;
+    const max = index === 0 || index === finalOffsets.length - 1 ? 150 : 300;
     const delay = index * 30;
 
     return useDerivedValue(() => {
-      const targetHeight = min + volume.value * ((max - min) / 100);
+      const targetHeight = interpolate(volume.value, [0, 100], [min, max]);
+      // min + volume.value * ((max - min) / 100);
 
       return withDelay(
         delay,
@@ -96,15 +94,15 @@ const FanOutBallsAnimation: React.FC<{
         offset.value,
         [0, 1],
         [
-          INTRO_CONTENT[newColorIndex.value].fontColor,
-          INTRO_CONTENT[currentIndex.value].fontColor,
+          INTRO_CONTENT[newColorIndex.value]!.fontColor,
+          INTRO_CONTENT[currentIndex.value]!.fontColor,
         ],
         "RGB",
       );
       return {
         transform: [{ translateX: offset.value * finalOffset }],
         backgroundColor: color,
-        height: ballHeights[index].value,
+        height: ballHeights[index]!.value,
         width: ballSize,
         borderRadius: ballSize / 2,
       };
@@ -124,7 +122,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "relative",
-    width: 200, // Adjust as needed
+    width: 200,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -134,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FanOutBallsAnimation;
+export default WaveformIntroAnimation;
