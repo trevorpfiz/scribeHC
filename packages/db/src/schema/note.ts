@@ -39,11 +39,11 @@ export const updateNoteParams = baseSchema
   .extend({
     id: baseSchema.shape.id,
   });
-export const reportIdSchema = baseSchema.pick({ id: true });
+export const noteIdSchema = baseSchema.pick({ id: true });
 
 // Types for Notes - used to type API request params and within Components
 export type Note = typeof Note.$inferSelect;
 export type NewNote = z.infer<typeof insertNoteSchema>;
 export type NewNoteParams = z.infer<typeof insertNoteParams>;
 export type UpdateNoteParams = z.infer<typeof updateNoteParams>;
-export type NoteId = z.infer<typeof reportIdSchema>["id"];
+export type NoteId = z.infer<typeof noteIdSchema>["id"];

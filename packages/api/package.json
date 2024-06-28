@@ -7,6 +7,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
+    },
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./src/lib/api/client/index.ts"
     }
   },
   "license": "MIT",
@@ -16,12 +20,14 @@
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "generate-client": "pnpm dlx @hey-api/openapi-ts --input https://next-fast-turbo.vercel.app/openapi.json --output ./src/lib/api/client --client fetch",
+    "generate-client:dev": "pnpm dlx @hey-api/openapi-ts --input http://127.0.0.1:8000/openapi.json --output ./src/lib/api/client --client fetch"
   },
   "dependencies": {
+    "@clerk/nextjs": "^5.1.6",
     "@shc/db": "workspace:*",
     "@shc/validators": "workspace:*",
-    "@supabase/supabase-js": "^2.44.0",
     "@trpc/server": "11.0.0-rc.364",
     "nanoid": "^5.0.7",
     "superjson": "2.2.1",

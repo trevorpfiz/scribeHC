@@ -1,11 +1,12 @@
-import type { RequestPasswordReset } from "@shc/validators";
 import React, { useState } from "react";
 import { View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { useSignIn } from "@clerk/clerk-expo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { RequestPasswordResetSchema } from "@shc/validators";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+
+import type { RequestPasswordReset } from "@shc/validators";
+import { RequestPasswordResetSchema } from "@shc/validators";
 
 import { ResetPasswordVerificationForm } from "~/components/auth/reset-password-verification-form";
 import { Button } from "~/components/ui/button";

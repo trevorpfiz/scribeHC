@@ -99,16 +99,12 @@ const Trigger = React.forwardRef<PressableRef, SlottablePressableProps>(
     const triggerRef = React.useRef<View>(null);
     const { open, onOpenChange, setTriggerPosition } = useTooltipContext();
 
-    React.useImperativeHandle(
-      ref,
-      () => {
-        if (!triggerRef.current) {
-          return new View({});
-        }
-        return triggerRef.current;
-      },
-      [triggerRef.current],
-    );
+    React.useImperativeHandle(ref, () => {
+      if (!triggerRef.current) {
+        return new View({});
+      }
+      return triggerRef.current;
+    }, [triggerRef.current]);
 
     function onPress(ev: GestureResponderEvent) {
       if (disabled) return;

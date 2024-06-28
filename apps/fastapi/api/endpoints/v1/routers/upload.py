@@ -52,6 +52,9 @@ async def transcribe_audio(
     try:
         # Use BytesIO to handle the file in-memory
         file_like = io.BytesIO(contents)
+
+        # Reset the buffer's position to the start (not needed with await?)
+        file_like.seek(0)
         
         # Add a background task to close the buffer after processing
         background_tasks.add_task(file_like.close)

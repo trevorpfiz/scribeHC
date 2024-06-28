@@ -1,34 +1,41 @@
+import "~/app/globals.css";
+import "~/styles/prosemirror.css";
+
 import type { Metadata, Viewport } from "next";
-import { cn } from "@shc/ui";
-import { Toaster } from "@shc/ui/sonner";
-import { ThemeProvider, ThemeToggle } from "@shc/ui/theme";
+import { ClerkProvider } from "@clerk/nextjs";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
-import { TRPCReactProvider } from "~/trpc/react";
-
-import "~/app/globals.css";
+import { OpenAPI } from "@shc/api/client";
+import { cn } from "@shc/ui";
+import { Toaster } from "@shc/ui/sonner";
+import { ThemeProvider } from "@shc/ui/theme";
 
 import { env } from "~/env";
+import { TRPCReactProvider } from "~/trpc/react";
+
+if (env.NODE_ENV === "production") {
+  OpenAPI.BASE = env.NEXT_PUBLIC_FASTAPI_URL;
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
-      ? "https://turbo.t3.gg"
+      ? "https://app.scribeHCCC.com"
       : "http://localhost:3000",
   ),
-  title: "T3 Turbo x Supabase",
-  description: "Simple monorepo with shared backend for web & mobile apps",
+  title: "scribeHC",
+  description: "AI ambient scribe app for healthcare.",
   openGraph: {
-    title: "T3 Turbo x Supabase",
-    description: "Simple monorepo with shared backend for web & mobile apps",
-    url: "https://github.com/supabase-community/create-t3-turbo",
-    siteName: "T3 Turbo x Supabase",
+    title: "scribeHC",
+    description: "AI ambient scribe app for healthcare.",
+    url: "https://www.scribeHCCC.com",
+    siteName: "scribeHC",
   },
   twitter: {
     card: "summary_large_image",
-    site: "@jullerino",
-    creator: "@jullerino",
+    site: "@trevorpfiz",
+    creator: "@trevorpfiz",
   },
 };
 
@@ -41,22 +48,26 @@ export const viewport: Viewport = {
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans text-foreground antialiased",
-          GeistSans.variable,
-          GeistMono.variable,
-        )}
-      >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TRPCReactProvider>{props.children}</TRPCReactProvider>
-          <div className="absolute bottom-4 right-4">
-            <ThemeToggle />
-          </div>
-          <Toaster />
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans text-foreground antialiased",
+            GeistSans.variable,
+            GeistMono.variable,
+          )}
+        >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TRPCReactProvider>{props.children}</TRPCReactProvider>
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

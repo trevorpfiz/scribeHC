@@ -1,11 +1,12 @@
-import type { ResetPassword } from "@shc/validators";
 import React, { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { useSignIn } from "@clerk/clerk-expo";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ResetPasswordSchema } from "@shc/validators";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+
+import type { ResetPassword } from "@shc/validators";
+import { ResetPasswordSchema } from "@shc/validators";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";

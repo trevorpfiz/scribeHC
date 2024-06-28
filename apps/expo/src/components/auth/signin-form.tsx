@@ -1,12 +1,13 @@
-import type { SignIn } from "@shc/validators";
 import type { SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { Link } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SignInSchema } from "@shc/validators";
 import { Controller, FormProvider, useForm } from "react-hook-form";
+
+import type { SignIn } from "@shc/validators";
+import { SignInSchema } from "@shc/validators";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
