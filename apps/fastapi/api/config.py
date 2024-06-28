@@ -8,7 +8,7 @@ load_dotenv()
 
 # Otherwise, the root path will be the local host. ROOT_PATH is an env var configured in Vercel deployment.
 # The value for production is equal to the root path of the deployment URL in Vercel.
-ROOT_PATH = os.getenv("ROOT_PATH", "http://127.0.0.1:8000")
+ROOT_PATH = os.getenv("ROOT_PATH", "/")
 
 
 class Settings(BaseSettings):

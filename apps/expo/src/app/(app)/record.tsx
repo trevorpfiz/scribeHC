@@ -1,21 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Audio } from "expo-av";
+import Constants from "expo-constants";
 import { Link } from "expo-router";
+import { useAuth } from "@clerk/clerk-expo";
 import colors from "tailwindcss/colors";
 
 import WaveformAnimation from "~/components/recording/waveform";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { ChevronLeft } from "~/lib/icons/chevron-left";
+import { getFormattedDate } from "~/lib/utils";
+import { api } from "~/utils/api";
+import { getBaseUrl } from "~/utils/base-url";
 
 export default function RecordScreen() {
+  const { getToken } = useAuth();
+
+  const SERVER_URL = getBaseUrl(8000);
+
   const [recording, setRecording] = useState<Audio.Recording>();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const [uploading, setUploading] = useState(false);
 
   const metering = useSharedValue(-160);
+
+  const utils = api.useUtils();
+  const createNote = api.note.create.useMutation({
+    onSuccess: async () => {
+      await utils.note.invalidate();
+      setUploading(false);
+      // router.push("/notes");
+    },
+    onError: (err) => {
+      console.error("Failed to create note", err);
+      setUploading(false);
+    },
+  });
 
   async function startRecording() {
     try {
@@ -56,8 +79,59 @@ export default function RecordScreen() {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
     });
-    const uri = recording?.getURI();
+    const uri = recording?.getURI() ?? "";
     console.log("Recording stopped and stored at", uri);
+
+    // TODO: Send recording to backend
+    const filetype = uri.split(".").pop();
+    console.log("Filetype:", filetype);
+    const filename = uri.split("/").pop();
+    console.log("Filename:", filename);
+    const formData = new FormData();
+    formData.append("file", {
+      uri,
+      type: `audio/mp4`,
+      name: filename,
+    } as unknown as File);
+
+    setUploading(true);
+
+    try {
+      const authToken = await getToken();
+
+      if (!authToken) {
+        throw new Error("No auth token found");
+      }
+
+      const response = await fetch(`${SERVER_URL}/v1/upload`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          `HTTP error! status: ${response.status}, details: ${JSON.stringify(errorData)}`,
+        );
+      }
+
+      const responseData = await response.json();
+      console.log("Upload successful:", responseData.message || responseData);
+
+      const currentDate = getFormattedDate();
+      createNote.mutate({
+        title: `SOAP note - ${currentDate}`,
+        content: "test",
+        transcript: responseData.transcription,
+      });
+    } catch (error) {
+      console.error("Upload Error:", error);
+      alert("Upload failed.");
+    }
   }
 
   return (
@@ -77,6 +151,7 @@ export default function RecordScreen() {
 
           <View className="text-center">
             {recording ? <Text>Recording</Text> : <Text>Tap to record</Text>}
+            {uploading && <Text>Uploading...</Text>}
           </View>
 
           <View className="flex-1" />

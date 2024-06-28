@@ -34,11 +34,15 @@ export const createTRPCContext = async (opts: {
 }) => {
   // React Native will pass their token through headers,
   // browsers will have the session cookie set
-  const authToken = opts.headers.get("Authorization");
+  const authHeader = opts.headers.get("Authorization");
 
   let userId: string | null = null;
 
-  if (authToken) {
+  if (authHeader) {
+    const authToken = authHeader.startsWith("Bearer ")
+      ? authHeader.slice("Bearer ".length)
+      : authHeader;
+
     const verifiedToken = await verifyToken(authToken, {
       jwtKey: process.env.CLERK_JWT_KEY,
     });

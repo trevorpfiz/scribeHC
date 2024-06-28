@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Optional, List
 
 import requests
 from fastapi import HTTPException, Security
@@ -10,11 +10,19 @@ from jose.utils import base64url_decode
 
 from api.config import settings
 
-logging.basicConfig(level=logging.DEBUG)
+if settings.ENVIRONMENT == "development":
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.WARNING)
 
 ALGORITHM = "RS256"
 security = HTTPBearer()
 
+# Define the allowed origins for the azp claim
+ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "com.scribehc.app",
+]
 
 def get_jwks(jwks_url: str):
     """Fetch the JWKS from the given URL."""
@@ -40,10 +48,10 @@ def get_public_key(token: str, jwks_url: str):
             break
     if not rsa_key:
         raise HTTPException(status_code=401, detail="Unable to find appropriate key")
-    return jwk.construct(rsa_key)
+    return jwk.construct(rsa_key, algorithm=ALGORITHM)
 
 
-def decode_jwt(token: str, jwks_url: str) -> Optional[dict]:
+def decode_jwt(token: str, jwks_url: str, allowed_origins: List[str]) -> Optional[dict]:
     """Decode a JWT token and verify its expiration and azp claim using JWKS."""
     try:
         logging.info("Attempting to decode the JWT token.")
@@ -77,8 +85,10 @@ def decode_jwt(token: str, jwks_url: str) -> Optional[dict]:
 
         # Validate authorized parties by the azp claim
         azp = payload.get("azp")
-        if azp and azp != "your_authorized_party":
-            logging.warning("Unauthorized party.")
+        logging.debug(f"azp: {azp}")
+
+        if azp and azp not in allowed_origins:
+            logging.warning(f"Unauthorized party: {azp}")
             return None
 
         logging.info("JWT successfully decoded.")
@@ -105,7 +115,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Security(security))
         headers={"WWW-Authenticate": "Bearer"},
     )
 
-    payload = decode_jwt(token, settings.CLERK_JWKS_URL)
+    payload = decode_jwt(token, settings.CLERK_JWKS_URL, ALLOWED_ORIGINS)
     if not payload or "sub" not in payload:
         raise credentials_exception
 

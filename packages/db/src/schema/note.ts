@@ -1,7 +1,7 @@
+import type { z } from "zod";
 import { sql } from "drizzle-orm";
 import { text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import { timestamps } from "../lib/utils";
 import { createTable } from "./_table";
@@ -20,11 +20,30 @@ export const Note = createTable("note", {
   }).$onUpdateFn(() => sql`now()`),
 });
 
-export const CreateNoteSchema = createInsertSchema(Note, {
-  title: z.string().max(256),
-  content: z.string().max(256),
-}).omit({
+// Schema for Notes - used to validate API requests
+const baseSchema = createSelectSchema(Note).omit(timestamps);
+
+export const insertNoteSchema = createInsertSchema(Note).omit(timestamps);
+export const insertNoteParams = insertNoteSchema.extend({}).omit({
   id: true,
   userId: true,
-  ...timestamps,
 });
+
+export const updateNoteSchema = baseSchema;
+export const updateNoteParams = baseSchema
+  .extend({})
+  .omit({
+    userId: true,
+  })
+  .partial()
+  .extend({
+    id: baseSchema.shape.id,
+  });
+export const reportIdSchema = baseSchema.pick({ id: true });
+
+// Types for Notes - used to type API request params and within Components
+export type Note = typeof Note.$inferSelect;
+export type NewNote = z.infer<typeof insertNoteSchema>;
+export type NewNoteParams = z.infer<typeof insertNoteParams>;
+export type UpdateNoteParams = z.infer<typeof updateNoteParams>;
+export type NoteId = z.infer<typeof reportIdSchema>["id"];
