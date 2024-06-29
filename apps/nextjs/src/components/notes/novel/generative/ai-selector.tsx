@@ -1,20 +1,22 @@
 "use client";
 
-import { Command, CommandInput } from "@/components/tailwind/ui/command";
-
+import { useState } from "react";
 import { useCompletion } from "ai/react";
 import { ArrowUp } from "lucide-react";
 import { useEditor } from "novel";
 import { addAIHighlight } from "novel/extensions";
-import { useState } from "react";
 import Markdown from "react-markdown";
 import { toast } from "sonner";
-import { Button } from "../ui/button";
+
+import { Button } from "@shc/ui/button";
+import { Command, CommandInput } from "@shc/ui/command";
+import { ScrollArea } from "@shc/ui/scroll-area";
+
 import CrazySpinner from "../ui/icons/crazy-spinner";
 import Magic from "../ui/icons/magic";
-import { ScrollArea } from "../ui/scroll-area";
 import AICompletionCommands from "./ai-completion-command";
 import AISelectorCommands from "./ai-selector-commands";
+
 //TODO: I think it makes more sense to create a custom Tiptap extension for this functionality https://tiptap.dev/docs/editor/ai/introduction
 
 interface AISelectorProps {
@@ -47,7 +49,7 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
       {hasCompletion && (
         <div className="flex max-h-[400px]">
           <ScrollArea>
-            <div className="prose p-2 px-4 prose-sm">
+            <div className="prose prose-sm p-2 px-4">
               <Markdown>{completion}</Markdown>
             </div>
           </ScrollArea>
@@ -70,7 +72,11 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
               value={inputValue}
               onValueChange={setInputValue}
               autoFocus
-              placeholder={hasCompletion ? "Tell AI what to do next" : "Ask AI to edit or generate..."}
+              placeholder={
+                hasCompletion
+                  ? "Tell AI what to do next"
+                  : "Ask AI to edit or generate..."
+              }
               onFocus={() => addAIHighlight(editor)}
             />
             <Button
@@ -83,7 +89,9 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
                   }).then(() => setInputValue(""));
 
                 const slice = editor.state.selection.content();
-                const text = editor.storage.markdown.serializer.serialize(slice.content);
+                const text = editor.storage.markdown.serializer.serialize(
+                  slice.content,
+                );
 
                 complete(text, {
                   body: { option: "zap", command: inputValue },
@@ -102,7 +110,11 @@ export function AISelector({ onOpenChange }: AISelectorProps) {
               completion={completion}
             />
           ) : (
-            <AISelectorCommands onSelect={(value, option) => complete(value, { body: { option } })} />
+            <AISelectorCommands
+              onSelect={(value, option) =>
+                complete(value, { body: { option } })
+              }
+            />
           )}
         </>
       )}

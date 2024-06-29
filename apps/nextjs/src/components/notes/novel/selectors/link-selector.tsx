@@ -1,10 +1,10 @@
-import { Button } from "@/components/tailwind/ui/button";
-import { PopoverContent } from "@/components/tailwind/ui/popover";
-import { cn } from "@/lib/utils";
-import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
+import { useEffect, useRef } from "react";
 import { Check, Trash } from "lucide-react";
 import { useEditor } from "novel";
-import { useEffect, useRef } from "react";
+
+import { cn } from "@shc/ui";
+import { Button } from "@shc/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@shc/ui/popover";
 
 export function isValidUrl(url: string) {
   try {
@@ -42,7 +42,11 @@ export const LinkSelector = ({ open, onOpenChange }: LinkSelectorProps) => {
   return (
     <Popover modal={true} open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
-        <Button size="sm" variant="ghost" className="gap-2 rounded-none border-none">
+        <Button
+          size="sm"
+          variant="ghost"
+          className="gap-2 rounded-none border-none"
+        >
           <p className="text-base">↗</p>
           <p
             className={cn("underline decoration-stone-400 underline-offset-4", {

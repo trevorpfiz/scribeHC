@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@vercel/postgres": "^0.8.0",
-    "drizzle-orm": "^0.30.10",
+    "drizzle-orm": "^0.31.2",
     "drizzle-zod": "^0.5.1",
     "pg": "^8.11.5"
   },
@@ -43,7 +43,7 @@
     "@shc/prettier-config": "workspace:*",
     "@shc/tsconfig": "workspace:*",
     "dotenv-cli": "^7.4.1",
-    "drizzle-kit": "^0.21.2",
+    "drizzle-kit": "^0.22.7",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",
     "tsx": "^4.9.3",

@@ -23,6 +23,7 @@
     "@shc/eslint-config": "workspace:*",
     "@shc/prettier-config": "workspace:*",
     "@shc/tsconfig": "workspace:*",
+    "@tailwindcss/typography": "^0.5.13",
     "eslint": "^9.2.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"

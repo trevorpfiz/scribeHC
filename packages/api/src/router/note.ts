@@ -64,7 +64,8 @@ export const noteRouter = {
     .mutation(async ({ ctx, input }) => {
       const { id, content, title } = input;
       const userId = ctx.userId;
-
+      // {"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":""}]}]}
+      console.log(input);
       const [r] = await ctx.db
         .update(Note)
         .set({

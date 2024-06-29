@@ -14,7 +14,9 @@ import { handleCommandNavigation, ImageResizer } from "novel/extensions";
 import { handleImageDrop, handleImagePaste } from "novel/plugins";
 import { useDebouncedCallback } from "use-debounce";
 
-import { defaultValue } from "./default-value";
+import { Separator } from "@shc/ui/separator";
+
+import { defaultEditorContent } from "./default-content";
 import { defaultExtensions } from "./extensions";
 import GenerativeMenuSwitch from "./generative/generative-menu-switch";
 import { uploadFn } from "./image-upload";
@@ -23,13 +25,14 @@ import { LinkSelector } from "./selectors/link-selector";
 import { NodeSelector } from "./selectors/node-selector";
 import { TextButtons } from "./selectors/text-buttons";
 import { slashCommand, suggestionItems } from "./slash-command";
-import { Separator } from "./ui/separator";
+import { api } from "~/trpc/react";
+import { toast } from "@shc/ui/sonner";
 
 const hljs = require("highlight.js");
 
 const extensions = [...defaultExtensions, slashCommand];
 
-const TailwindAdvancedEditor = () => {
+const TailwindAdvancedEditor = (props: { noteId: string; content: string }) => {
   const [initialContent, setInitialContent] = useState<null | JSONContent>(
     null,
   );
@@ -40,6 +43,21 @@ const TailwindAdvancedEditor = () => {
   const [openColor, setOpenColor] = useState(false);
   const [openLink, setOpenLink] = useState(false);
   const [openAI, setOpenAI] = useState(false);
+
+  const utils = api.useUtils();
+  const { mutate: updateNote } =
+    api.note.update.useMutation({
+      onSettled: async (data, err) => {
+        if (err) {
+          toast.error(err.message);
+          return;
+        }
+
+        await utils.note.byUser.invalidate();
+
+        setSaveStatus("Saved");
+      },
+    });
 
   //Apply Codeblock Highlighting on the HTML from editor.getHTML()
   const highlightCodeblocks = (content: string) => {
@@ -53,33 +71,27 @@ const TailwindAdvancedEditor = () => {
   };
 
   const debouncedUpdates = useDebouncedCallback(
-    async (editor: EditorInstance) => {
+    (editor: EditorInstance) => {
       const json = editor.getJSON();
       setCharsCount(editor.storage.characterCount.words());
-      window.localStorage.setItem(
-        "html-content",
-        highlightCodeblocks(editor.getHTML()),
-      );
-      window.localStorage.setItem("novel-content", JSON.stringify(json));
-      window.localStorage.setItem(
-        "markdown",
-        editor.storage.markdown.getMarkdown(),
-      );
-      setSaveStatus("Saved");
+
+      updateNote({ id: props.noteId, content: JSON.stringify(json) });
     },
     500,
   );
 
   useEffect(() => {
-    const content = window.localStorage.getItem("novel-content");
-    if (content) setInitialContent(JSON.parse(content));
-    else setInitialContent(defaultValue);
-  }, []);
+    if (props.content) {
+      setInitialContent(JSON.parse(props.content));
+    } else {
+      setInitialContent(defaultEditorContent);
+    }
+  }, [props.content]);
 
   if (!initialContent) return null;
 
   return (
-    <div className="relative w-full max-w-screen-lg">
+    <div className="relative w-full">
       <div className="absolute right-5 top-5 z-10 mb-5 flex gap-2">
         <div className="rounded-lg bg-accent px-2 py-1 text-sm text-muted-foreground">
           {saveStatus}
@@ -98,7 +110,7 @@ const TailwindAdvancedEditor = () => {
         <EditorContent
           initialContent={initialContent}
           extensions={extensions}
-          className="relative min-h-[500px] w-full max-w-screen-lg border-muted bg-background sm:mb-[calc(20vh)] sm:rounded-lg sm:border sm:shadow-lg"
+          className="relative min-h-[300px] w-full border-muted bg-background sm:rounded-lg sm:border sm:shadow-lg"
           editorProps={{
             handleDOMEvents: {
               keydown: (_view, event) => handleCommandNavigation(event),
@@ -109,7 +121,7 @@ const TailwindAdvancedEditor = () => {
               handleImageDrop(view, event, moved, uploadFn),
             attributes: {
               class:
-                "prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full",
+                "prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full min-h-[300px]",
             },
           }}
           onUpdate={({ editor }) => {

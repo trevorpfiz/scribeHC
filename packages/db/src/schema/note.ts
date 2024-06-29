@@ -1,5 +1,4 @@
 import type { z } from "zod";
-import { sql } from "drizzle-orm";
 import { text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
@@ -17,7 +16,7 @@ export const Note = createTable("note", {
   updatedAt: timestamp("updatedAt", {
     mode: "date",
     withTimezone: true,
-  }).$onUpdateFn(() => sql`now()`),
+  }).$onUpdateFn(() => new Date()),
 });
 
 // Schema for Notes - used to validate API requests

@@ -1,7 +1,15 @@
-import { Button } from "@/components/tailwind/ui/button";
-import { cn } from "@/lib/utils";
-import { BoldIcon, CodeIcon, ItalicIcon, StrikethroughIcon, UnderlineIcon } from "lucide-react";
+import {
+  BoldIcon,
+  CodeIcon,
+  ItalicIcon,
+  StrikethroughIcon,
+  UnderlineIcon,
+} from "lucide-react";
 import { EditorBubbleItem, useEditor } from "novel";
+
+import { cn } from "@shc/ui";
+import { Button } from "@shc/ui/button";
+
 import type { SelectorItem } from "./node-selector";
 
 export const TextButtons = () => {
