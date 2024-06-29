@@ -34,7 +34,7 @@ export const noteRouter = {
 
     const rows = await ctx.db.query.Note.findMany({
       where: eq(Note.userId, userId),
-      orderBy: desc(Note.id),
+      orderBy: desc(Note.createdAt),
     });
 
     return { notes: rows };
@@ -64,8 +64,7 @@ export const noteRouter = {
     .mutation(async ({ ctx, input }) => {
       const { id, content, title } = input;
       const userId = ctx.userId;
-      // {"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":""}]}]}
-      console.log(input);
+
       const [r] = await ctx.db
         .update(Note)
         .set({

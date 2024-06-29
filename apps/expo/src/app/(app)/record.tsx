@@ -3,8 +3,7 @@ import { View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Audio } from "expo-av";
-import Constants from "expo-constants";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 import colors from "tailwindcss/colors";
 
@@ -12,12 +11,14 @@ import WaveformAnimation from "~/components/recording/waveform";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { ChevronLeft } from "~/lib/icons/chevron-left";
-import { getFormattedDate } from "~/lib/utils";
+import { Loader2 } from "~/lib/icons/loader-2";
+import { getFormattedDateTime } from "~/lib/utils";
 import { api } from "~/utils/api";
 import { getBaseUrl } from "~/utils/base-url";
 
 export default function RecordScreen() {
   const { getToken } = useAuth();
+  const router = useRouter();
 
   const SERVER_URL = getBaseUrl(8000);
 
@@ -32,13 +33,21 @@ export default function RecordScreen() {
     onSuccess: async () => {
       await utils.note.invalidate();
       setUploading(false);
-      // router.push("/notes");
+      router.replace("/(app)/dashboard");
     },
     onError: (err) => {
       console.error("Failed to create note", err);
       setUploading(false);
+      alert("Processing failed. Please try again.");
     },
   });
+
+  useEffect(() => {
+    startRecording();
+    return () => {
+      discardRecording();
+    };
+  }, []);
 
   async function startRecording() {
     try {
@@ -71,6 +80,17 @@ export default function RecordScreen() {
     }
   }
 
+  async function discardRecording() {
+    console.log("Discarding recording..");
+    setRecording(undefined);
+    metering.value = -160; // reset metering
+    await recording?.stopAndUnloadAsync();
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+    });
+    console.log("Recording discarded");
+  }
+
   async function stopRecording() {
     console.log("Stopping recording..");
     setRecording(undefined);
@@ -82,7 +102,10 @@ export default function RecordScreen() {
     const uri = recording?.getURI() ?? "";
     console.log("Recording stopped and stored at", uri);
 
-    // TODO: Send recording to backend
+    processRecording(uri);
+  }
+
+  async function processRecording(uri: string) {
     const filetype = uri.split(".").pop();
     console.log("Filetype:", filetype);
     const filename = uri.split("/").pop();
@@ -122,10 +145,10 @@ export default function RecordScreen() {
       const responseData = await response.json();
       console.log("Upload successful:", responseData.message || responseData);
 
-      const currentDate = getFormattedDate();
+      const currentDate = getFormattedDateTime();
       createNote.mutate({
         title: `SOAP note - ${currentDate}`,
-        content: "test",
+        content: responseData.content,
         transcript: responseData.transcription,
       });
     } catch (error) {
@@ -139,7 +162,13 @@ export default function RecordScreen() {
       <View className="flex-1 justify-between px-8 py-4">
         <View className="w-full flex-row items-center justify-between">
           <View className="flex-1">
-            <Link href="/(app)/dashboard" asChild>
+            <Link
+              href="/(app)/dashboard"
+              asChild
+              onPress={() => {
+                discardRecording();
+              }}
+            >
               <Button
                 size={"icon"}
                 className="bg-transparent active:opacity-50"
@@ -150,15 +179,26 @@ export default function RecordScreen() {
           </View>
 
           <View className="text-center">
-            {recording ? <Text>Recording</Text> : <Text>Tap to record</Text>}
-            {uploading && <Text>Uploading...</Text>}
+            {!uploading && <Text>Recording...</Text>}
+            {uploading && <Text>Processing...</Text>}
           </View>
 
           <View className="flex-1" />
         </View>
 
         <View className="flex-1 items-center">
-          <WaveformAnimation metering={metering} />
+          {uploading ? (
+            <View className="flex-1 items-center justify-center">
+              <Loader2
+                size={48}
+                color="black"
+                strokeWidth={3}
+                className="animate-spin"
+              />
+            </View>
+          ) : (
+            <WaveformAnimation metering={metering} />
+          )}
         </View>
 
         <View className="items-center">

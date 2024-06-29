@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@bacons/text-decoder": "^0.0.0",
-    "@clerk/clerk-expo": "^1.1.6",
+    "@clerk/clerk-expo": "^1.2.3",
     "@expo/metro-config": "^0.18.3",
     "@expo/vector-icons": "^14.0.0",
     "@gorhom/bottom-sheet": "^4.6.3",
