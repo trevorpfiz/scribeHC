@@ -2,6 +2,7 @@ import React from "react";
 import { Linking } from "react-native";
 
 import { Text } from "~/components/ui/text";
+import { cn } from "~/lib/utils";
 
 // Custom component to render different content types
 const RenderContent = (props: { content: string }) => {
@@ -15,14 +16,7 @@ const RenderContent = (props: { content: string }) => {
     switch (block.type) {
       case "heading":
         return (
-          <Text
-            key={index}
-            style={{
-              fontSize: block.attrs.level === 2 ? 24 : 20,
-              fontWeight: "bold",
-              marginVertical: 8,
-            }}
-          >
+          <Text key={index} className="py-2 text-lg font-semibold">
             {block.content.map((textBlock, idx) => (
               <Text key={idx}>{textBlock.text}</Text>
             ))}
@@ -30,31 +24,35 @@ const RenderContent = (props: { content: string }) => {
         );
       case "paragraph":
         return (
-          <Text key={index} style={{ fontSize: 16, marginVertical: 4 }}>
-            {block.content.map((textBlock, idx) => (
-              <Text
-                key={idx}
-                style={{
-                  color:
-                    textBlock.marks &&
-                    textBlock.marks.some((mark) => mark.type === "link")
-                      ? "blue"
-                      : "black",
-                }}
-                onPress={() => {
-                  if (textBlock.marks) {
-                    const link = textBlock.marks.find(
-                      (mark) => mark.type === "link",
-                    );
-                    if (link) {
-                      Linking.openURL(link.attrs.href);
-                    }
+          <Text key={index} className="py-1">
+            {block.content.map((textBlock, idx) => {
+              const hasLink =
+                textBlock.marks &&
+                textBlock.marks.some((mark) => mark.type === "link");
+              return (
+                <Text
+                  key={idx}
+                  className={cn(
+                    "text-foreground",
+                    hasLink ? "text-blue" : "text-foreground",
+                  )}
+                  onPress={
+                    hasLink
+                      ? () => {
+                          const link = textBlock.marks.find(
+                            (mark) => mark.type === "link",
+                          );
+                          if (link) {
+                            Linking.openURL(link.attrs.href);
+                          }
+                        }
+                      : undefined
                   }
-                }}
-              >
-                {textBlock.text}
-              </Text>
-            ))}
+                >
+                  {textBlock.text}
+                </Text>
+              );
+            })}
           </Text>
         );
       case "text":

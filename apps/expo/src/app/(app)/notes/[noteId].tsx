@@ -37,9 +37,8 @@ export default function NotePage() {
         }}
       />
 
-      <View className="flex-1 gap-4 p-4">
+      <View className="flex-1 gap-8 p-4">
         <View className="flex-col gap-2">
-          <Text className="text-lg font-semibold">Content</Text>
           <View className={"text-wrap break-all rounded-lg bg-secondary p-4"}>
             <RenderContent content={data?.note?.content ?? "N/A"} />
           </View>

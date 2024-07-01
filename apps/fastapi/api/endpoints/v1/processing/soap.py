@@ -110,7 +110,7 @@ def generate_soap(transcript: str) -> str:
             },
             {
                 "role": "user",
-                "content": f"Generate a SOAP note from the following transcript and return it in JSON format for a Tiptap editor. This is the example format: {example_format_str}. The text fields can not be left blank, so try your best to fill them out. Transcript: {transcript}",
+                "content": f"Generate a SOAP note from the following transcript and return it in JSON format for a Tiptap editor. This is the example format: {example_format_str}. The first heading can be the subjective section. The text fields can not be left blank, so try your best to fill them out. Transcript: {transcript}",
             },
         ],
     )
