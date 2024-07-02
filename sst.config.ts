@@ -12,14 +12,19 @@ export default $config({
     const vpc = new sst.aws.Vpc("MyVpc");
     const rds = new sst.aws.Postgres("MyPostgres", { vpc });
 
-    const trpc = new sst.aws.Function("Trpc", {
-      url: true,
+    new sst.aws.Nextjs("MyWeb", {
+      path: "apps/nextjs",
       link: [rds],
-      handler: "apps/trpc/src/index.handler",
     });
 
-    return {
-      api: trpc.url,
-    };
+    // const trpc = new sst.aws.Function("Trpc", {
+    //   url: true,
+    //   link: [rds],
+    //   handler: "apps/trpc/src/index.handler",
+    // });
+
+    // return {
+    //   api: trpc.url,
+    // };
   },
 });

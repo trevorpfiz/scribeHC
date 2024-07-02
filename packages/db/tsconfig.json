@@ -4,6 +4,6 @@
     "outDir": "dist",
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
-  "include": ["src", "*.ts"],
+  "include": ["src", "*.ts", "../../sst-env.d.ts"],
   "exclude": ["node_modules"]
 }
