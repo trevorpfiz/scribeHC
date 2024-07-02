@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 
 import Loading from "~/app/loading";
 import NoteModal from "~/components/notes/note-modal";
+import TailwindAdvancedEditor from "~/components/notes/novel/advanced-editor";
 import { BackButton } from "~/components/shared/back-button";
 import { api } from "~/trpc/server";
-import TailwindAdvancedEditor from "~/components/notes/novel/advanced-editor";
 
 export default async function Note({ params }: { params: { noteId: string } }) {
   const { note } = await api.note.byId({ id: params.noteId });
@@ -28,7 +28,10 @@ export default async function Note({ params }: { params: { noteId: string } }) {
               <div
                 className={"text-wrap break-all rounded-lg bg-secondary p-1"}
               >
-                <TailwindAdvancedEditor noteId={note.id} content={note.content ?? ""} />
+                <TailwindAdvancedEditor
+                  noteId={note.id}
+                  content={note.content ?? ""}
+                />
               </div>
 
               <div className="flex flex-col gap-2">

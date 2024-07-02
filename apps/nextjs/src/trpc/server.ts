@@ -1,7 +1,6 @@
 import { cache } from "react";
 import { headers } from "next/headers";
-import { NextRequest } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 import { createCaller, createTRPCContext } from "@shc/api";
 
@@ -14,10 +13,8 @@ const createContext = cache(async () => {
   heads.set("x-trpc-source", "rsc");
 
   return createTRPCContext({
-    headers: heads,
-    auth: getAuth(
-      new NextRequest("https://notused.com", { headers: headers() }),
-    ),
+    event.headers: heads,
+    auth: auth(),
   });
 });
 

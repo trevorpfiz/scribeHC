@@ -15,7 +15,9 @@ import { handleImageDrop, handleImagePaste } from "novel/plugins";
 import { useDebouncedCallback } from "use-debounce";
 
 import { Separator } from "@shc/ui/separator";
+import { toast } from "@shc/ui/sonner";
 
+import { api } from "~/trpc/react";
 import { defaultEditorContent } from "./default-content";
 import { defaultExtensions } from "./extensions";
 import GenerativeMenuSwitch from "./generative/generative-menu-switch";
@@ -25,8 +27,6 @@ import { LinkSelector } from "./selectors/link-selector";
 import { NodeSelector } from "./selectors/node-selector";
 import { TextButtons } from "./selectors/text-buttons";
 import { slashCommand, suggestionItems } from "./slash-command";
-import { api } from "~/trpc/react";
-import { toast } from "@shc/ui/sonner";
 
 const hljs = require("highlight.js");
 
@@ -45,19 +45,18 @@ const TailwindAdvancedEditor = (props: { noteId: string; content: string }) => {
   const [openAI, setOpenAI] = useState(false);
 
   const utils = api.useUtils();
-  const { mutate: updateNote } =
-    api.note.update.useMutation({
-      onSettled: async (data, err) => {
-        if (err) {
-          toast.error(err.message);
-          return;
-        }
+  const { mutate: updateNote } = api.note.update.useMutation({
+    onSettled: async (data, err) => {
+      if (err) {
+        toast.error(err.message);
+        return;
+      }
 
-        await utils.note.byUser.invalidate();
+      await utils.note.byUser.invalidate();
 
-        setSaveStatus("Saved");
-      },
-    });
+      setSaveStatus("Saved");
+    },
+  });
 
   //Apply Codeblock Highlighting on the HTML from editor.getHTML()
   const highlightCodeblocks = (content: string) => {
@@ -70,15 +69,12 @@ const TailwindAdvancedEditor = (props: { noteId: string; content: string }) => {
     return new XMLSerializer().serializeToString(doc);
   };
 
-  const debouncedUpdates = useDebouncedCallback(
-    (editor: EditorInstance) => {
-      const json = editor.getJSON();
-      setCharsCount(editor.storage.characterCount.words());
+  const debouncedUpdates = useDebouncedCallback((editor: EditorInstance) => {
+    const json = editor.getJSON();
+    setCharsCount(editor.storage.characterCount.words());
 
-      updateNote({ id: props.noteId, content: JSON.stringify(json) });
-    },
-    500,
-  );
+    updateNote({ id: props.noteId, content: JSON.stringify(json) });
+  }, 500);
 
   useEffect(() => {
     if (props.content) {

@@ -1,7 +1,7 @@
 {
-  "id": "52472b77-bba2-45cd-9f5c-2105d2d505c7",
+  "id": "e6333f85-9425-41a9-aa78-f4177f5831a5",
   "prevId": "00000000-0000-0000-0000-000000000000",
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.scribeHC_note": {
@@ -37,7 +37,7 @@
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",

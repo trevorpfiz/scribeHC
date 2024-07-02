@@ -1,5 +1,4 @@
-import * as React from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
@@ -27,26 +26,36 @@ export default function Dashboard() {
             />
           </View>
         ) : (
-          <FlashList
-            data={data?.notes}
-            renderItem={({ item }) => (
-              <ItemCard
-                title={item.title}
-                preview={item.transcript ?? "N/A"}
-                onPress={() => {
-                  router.push(`/(app)/notes/${item.id}`);
+          <>
+            {data?.notes?.length === 0 ? (
+              <View className="flex-1 items-center justify-center">
+                <Text className="text-lg text-gray-700 dark:text-gray-300">
+                  Record a conversation!
+                </Text>
+              </View>
+            ) : (
+              <FlashList
+                data={data?.notes}
+                renderItem={({ item }) => (
+                  <ItemCard
+                    title={item.title}
+                    preview={item.transcript ?? "N/A"}
+                    onPress={() => {
+                      router.push(`/(app)/notes/${item.id}`);
+                    }}
+                  />
+                )}
+                estimatedItemSize={200}
+                keyExtractor={(item, index) => index.toString()}
+                ItemSeparatorComponent={() => <View className="h-4" />}
+                contentContainerStyle={{
+                  paddingBottom: 16,
+                  paddingTop: 16,
+                  paddingHorizontal: 16,
                 }}
               />
             )}
-            estimatedItemSize={200}
-            keyExtractor={(item, index) => index.toString()}
-            ItemSeparatorComponent={() => <View className="h-4" />}
-            contentContainerStyle={{
-              paddingBottom: 16,
-              paddingTop: 16,
-              paddingHorizontal: 16,
-            }}
-          />
+          </>
         )}
         <View className="absolute bottom-4 left-4 right-4 h-[12%] flex-row justify-around rounded-3xl bg-gray-200 p-4 dark:bg-gray-800">
           <View className="flex-1 px-20">

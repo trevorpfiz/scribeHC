@@ -21,9 +21,13 @@
     "lint:ws": "pnpm dlx sherif@latest",
     "typecheck": "turbo typecheck"
   },
+  "dependencies": {
+    "sst": "ion"
+  },
   "devDependencies": {
     "@shc/prettier-config": "workspace:*",
     "@turbo/gen": "^1.13.3",
+    "@types/aws-lambda": "8.10.140",
     "prettier": "^3.2.5",
     "turbo": "^1.13.3",
     "typescript": "^5.4.5"
