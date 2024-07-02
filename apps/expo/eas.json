@@ -14,8 +14,6 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_SUPABASE_URL": "https://zixryllrthctmgjlzhhu.supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppeHJ5bGxydGhjdG1namx6aGh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTYzNDUyMjIsImV4cCI6MjAzMTkyMTIyMn0.EyqX6T40AQDt-D_6lVryK27DSmEFUq_b80wpMw8O23E",
         "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_Y2hlZXJmdWwtc3RhcmZpc2gtMjYuY2xlcmsuYWNjb3VudHMuZGV2JA"
       }
     },

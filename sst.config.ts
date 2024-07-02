@@ -16,15 +16,5 @@ export default $config({
       path: "apps/nextjs",
       link: [rds],
     });
-
-    // const trpc = new sst.aws.Function("Trpc", {
-    //   url: true,
-    //   link: [rds],
-    //   handler: "apps/trpc/src/index.handler",
-    // });
-
-    // return {
-    //   api: trpc.url,
-    // };
   },
 });
