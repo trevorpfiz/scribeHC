@@ -38,7 +38,7 @@
     "//#clean": {
       "cache": false
     },
-    "generate": {
+    "dk-generate": {
       "cache": false,
       "persistent": true
     },

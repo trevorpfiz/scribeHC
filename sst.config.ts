@@ -6,15 +6,14 @@ export default $config({
       name: "scribe-hc",
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
+      providers: {
+        aws: {
+          region: "us-east-1",
+        },
+      },
     };
   },
   async run() {
-    const vpc = new sst.aws.Vpc("MyVpc");
-    const rds = new sst.aws.Postgres("MyPostgres", { vpc });
-
-    new sst.aws.Nextjs("MyWeb", {
-      path: "apps/nextjs",
-      link: [rds],
-    });
+    const infra = await import("./infra");
   },
 });

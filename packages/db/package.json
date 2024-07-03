@@ -24,7 +24,7 @@
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "generate": "sst shell drizzle-kit generate",
+    "dk-generate": "sst shell drizzle-kit generate",
     "migrate": "sst shell drizzle-kit migrate",
     "migrate:script": "sst shell tsx src/migrate.ts",
     "push": "sst shell drizzle-kit push",
