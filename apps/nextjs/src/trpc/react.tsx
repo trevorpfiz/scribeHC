@@ -34,7 +34,10 @@ const getQueryClient = () => {
 
 export const api = createTRPCReact<AppRouter>();
 
-export function TRPCReactProvider(props: { children: React.ReactNode }) {
+export function TRPCReactProvider(props: {
+  children: React.ReactNode;
+  host: string | null;
+}) {
   const queryClient = getQueryClient();
 
   const [trpcClient] = useState(() =>
@@ -47,7 +50,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
         }),
         unstable_httpBatchStreamLink({
           transformer: SuperJSON,
-          url: getBaseUrl() + "/api/trpc",
+          url: getBaseUrl(props.host) + "/api/trpc",
           headers() {
             const headers = new Headers();
             headers.set("x-trpc-source", "nextjs-react");
@@ -67,9 +70,11 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
   );
 }
 
-const getBaseUrl = () => {
+const getBaseUrl = (host: string | null) => {
   if (typeof window !== "undefined") return window.location.origin;
-  if (env.VERCEL_URL) return `https://${env.VERCEL_URL}`;
+  if (env.NODE_ENV !== "development" && host) {
+    return `https://${host}`;
+  } // resource url from SST, used during SSR
   // eslint-disable-next-line no-restricted-properties
   return `http://localhost:${process.env.PORT ?? 3000}`;
 };

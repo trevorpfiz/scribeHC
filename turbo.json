@@ -59,7 +59,7 @@
       "interactive": true
     }
   },
-  "globalEnv": [],
+  "globalEnv": ["PORT"],
   "globalPassThroughEnv": [
     "NODE_ENV",
     "CI",

@@ -2,6 +2,7 @@ import "~/app/globals.css";
 import "~/styles/prosemirror.css";
 
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { ClerkProvider } from "@clerk/nextjs";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
@@ -20,7 +21,7 @@ if (env.NODE_ENV === "production") {
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    env.VERCEL_ENV === "production"
+    env.NODE_ENV === "production"
       ? "https://app.scribeHCCC.com"
       : "http://localhost:3000",
   ),
@@ -47,6 +48,9 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout(props: { children: React.ReactNode }) {
+  const headersList = headers();
+  const host = headersList.get("host");
+
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
@@ -63,7 +67,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             enableSystem
             disableTransitionOnChange
           >
-            <TRPCReactProvider>{props.children}</TRPCReactProvider>
+            <TRPCReactProvider host={host}>{props.children}</TRPCReactProvider>
             <Toaster />
           </ThemeProvider>
         </body>
