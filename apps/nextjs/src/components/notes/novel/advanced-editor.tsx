@@ -77,8 +77,30 @@ const TailwindAdvancedEditor = (props: { noteId: string; content: string }) => {
   }, 500);
 
   useEffect(() => {
+    const parseContent = (content: string): JSONContent => {
+      try {
+        return JSON.parse(content);
+      } catch {
+        // Handle plain text content
+        return {
+          type: "doc",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: content,
+                },
+              ],
+            },
+          ],
+        };
+      }
+    };
+
     if (props.content) {
-      setInitialContent(JSON.parse(props.content));
+      setInitialContent(parseContent(props.content));
     } else {
       setInitialContent(defaultEditorContent);
     }

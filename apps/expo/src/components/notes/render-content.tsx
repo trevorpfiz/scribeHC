@@ -10,7 +10,27 @@ const RenderContent = (props: { content: string }) => {
 
   if (!content) return null;
 
-  const contentJSON = JSON.parse(content);
+  let contentJSON;
+
+  try {
+    contentJSON = JSON.parse(content);
+  } catch {
+    // Handle plain text content
+    contentJSON = {
+      type: "doc",
+      content: [
+        {
+          type: "paragraph",
+          content: [
+            {
+              type: "text",
+              text: content,
+            },
+          ],
+        },
+      ],
+    };
+  }
 
   return contentJSON.content.map((block, index) => {
     switch (block.type) {
