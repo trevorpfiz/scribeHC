@@ -39,6 +39,8 @@
 
 https://github.com/trevorpfiz/scribeHC/assets/24904780/a1552b10-9694-4d9c-b5fc-ea3b23c91d8d
 
+https://github.com/trevorpfiz/scribeHC/assets/24904780/3feda629-a0d1-4a33-ba63-0c2c14ae1bb4
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- PROJECT DETAILS -->
