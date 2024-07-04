@@ -37,7 +37,7 @@
 
 ## Demo
 
-https://github.com/trevorpfiz/scribeHC/assets/19765785/488415cb-3a45-456c-8f45-de261a148da8
+https://github.com/trevorpfiz/scribeHC/assets/24904780/a1552b10-9694-4d9c-b5fc-ea3b23c91d8d
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
