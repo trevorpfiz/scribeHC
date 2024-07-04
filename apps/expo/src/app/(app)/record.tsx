@@ -20,7 +20,7 @@ export default function RecordScreen() {
   const { getToken } = useAuth();
   const router = useRouter();
 
-  const SERVER_URL = process.env.EXPO_PUBLIC_FASTAPI_URL ?? getBaseUrl(8000);
+  const SERVER_URL = getBaseUrl(8000); // TODO: add production FastAPI URL
 
   const [recording, setRecording] = useState<Audio.Recording>();
   const [permissionResponse, requestPermission] = Audio.usePermissions();
