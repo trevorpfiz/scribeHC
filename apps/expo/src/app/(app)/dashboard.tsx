@@ -27,7 +27,7 @@ export default function Dashboard() {
           </View>
         ) : (
           <>
-            {data?.notes?.length === 0 ? (
+            {data?.notes.length === 0 ? (
               <View className="flex-1 items-center justify-center">
                 <Text className="text-lg text-gray-700 dark:text-gray-300">
                   Record a conversation!

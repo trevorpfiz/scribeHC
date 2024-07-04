@@ -304,9 +304,6 @@ importers:
       eslint:
         specifier: ^9.4.0
         version: 9.5.0
-      eslint-plugin-testing-library:
-        specifier: ^6.2.2
-        version: 6.2.2(eslint@9.5.0)(typescript@5.5.2)
       jest:
         specifier: ^29.4.0
         version: 29.7.0(@types/node@20.14.9)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@20.14.9)(typescript@5.5.2))
@@ -661,7 +658,10 @@ importers:
         version: 7.34.3(eslint@9.5.0)
       eslint-plugin-react-hooks:
         specifier: rc
-        version: 5.1.0-rc-100dfd7dab-20240701(eslint@9.5.0)
+        version: 5.1.0-rc-9c6806964f-20240703(eslint@9.5.0)
+      eslint-plugin-testing-library:
+        specifier: ^6.2.2
+        version: 6.2.2(eslint@9.5.0)(typescript@5.5.2)
       eslint-plugin-turbo:
         specifier: ^2.0.3
         version: 2.0.6(eslint@9.5.0)
@@ -669,12 +669,21 @@ importers:
         specifier: rc-v8
         version: 8.0.0-alpha.39(eslint@9.5.0)(typescript@5.5.2)
     devDependencies:
+      '@eslint/compat':
+        specifier: ^1.1.0
+        version: 1.1.0
+      '@eslint/eslintrc':
+        specifier: ^3.1.0
+        version: 3.1.0
       '@shc/prettier-config':
         specifier: workspace:*
         version: link:../prettier
       '@shc/tsconfig':
         specifier: workspace:*
         version: link:../typescript
+      '@types/eslint__eslintrc':
+        specifier: ^2.1.1
+        version: 2.1.1
       eslint:
         specifier: ^9.4.0
         version: 9.5.0
@@ -2419,6 +2428,10 @@ packages:
   '@eslint-community/regexpp@4.10.1':
     resolution: {integrity: sha512-Zm2NGpWELsQAD1xsJzGQpYfvICSsFkEpU0jxBjfdC6uNEWXcHnfs9hScFWtXVDVl+rBQJGrl4g1vcKIejpH9dA==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
+
+  '@eslint/compat@1.1.0':
+    resolution: {integrity: sha512-s9Wi/p25+KbzxKlDm3VshQdImhWk+cbdblhwGNnyCU5lpSwtWa4v7VQCxSki0FAUrGA3s8nCWgYzAH41mwQVKQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/config-array@0.16.0':
     resolution: {integrity: sha512-/jmuSd74i4Czf1XXn7wGRWZCuyaUZ330NH1Bek0Pplatt4Sy1S5haN21SCLLdbeKslQ+S0wEJ+++v5YibSi+Lg==}
@@ -4351,6 +4364,12 @@ packages:
   '@types/diff-match-patch@1.0.36':
     resolution: {integrity: sha512-xFdR6tkm0MWvBfO8xXCSsinYxHcqkQUlcHeSpMC2ukzOb6lwQAfDmW+Qt0AvlGd8HpsS28qKsB+oPeJn9I39jg==}
 
+  '@types/eslint@8.56.10':
+    resolution: {integrity: sha512-Shavhk87gCtY2fhXDctcfS3e6FdxWkCx1iUZ9eEUbh7rTqlZT0/IzOkCOVt0fCjcFuZ9FPYfuezTBImfHCDBGQ==}
+
+  '@types/eslint__eslintrc@2.1.1':
+    resolution: {integrity: sha512-LI51vVv3N7WI4+fM7Xkh1+ciLA1gtuQPgXdKdece+vD8f/G2hrFqtwb4YIQyIM6VXpRM4vSy1PW5y3yuHK+Y2w==}
+
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
@@ -5945,8 +5964,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
 
-  eslint-plugin-react-hooks@5.1.0-rc-100dfd7dab-20240701:
-    resolution: {integrity: sha512-9/u+PSTsBhWDaDE17Liz2F6Os6Dd9Rgk+8Iv6E9EPxmrYPSXEwUAo0EMHtO+VQQ2+tmghyL6soWp0XiR+Q9Ywg==}
+  eslint-plugin-react-hooks@5.1.0-rc-9c6806964f-20240703:
+    resolution: {integrity: sha512-uSTTWDRuMgrnKulnpSydlOF3tikefeLhfBDfGggaSoWce4pPN7FZ65ZNYIyLO2YeBx/hHbQ1RAw3EcfqMvKYvA==}
     engines: {node: '>=10'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -12668,6 +12687,8 @@ snapshots:
 
   '@eslint-community/regexpp@4.10.1': {}
 
+  '@eslint/compat@1.1.0': {}
+
   '@eslint/config-array@0.16.0':
     dependencies:
       '@eslint/object-schema': 2.1.4
@@ -15404,6 +15425,15 @@ snapshots:
 
   '@types/diff-match-patch@1.0.36': {}
 
+  '@types/eslint@8.56.10':
+    dependencies:
+      '@types/estree': 1.0.5
+      '@types/json-schema': 7.0.15
+
+  '@types/eslint__eslintrc@2.1.1':
+    dependencies:
+      '@types/eslint': 8.56.10
+
   '@types/estree@1.0.5': {}
 
   '@types/glob@7.2.0':
@@ -17281,7 +17311,7 @@ snapshots:
       safe-regex-test: 1.0.3
       string.prototype.includes: 2.0.0
 
-  eslint-plugin-react-hooks@5.1.0-rc-100dfd7dab-20240701(eslint@9.5.0):
+  eslint-plugin-react-hooks@5.1.0-rc-9c6806964f-20240703(eslint@9.5.0):
     dependencies:
       eslint: 9.5.0
 

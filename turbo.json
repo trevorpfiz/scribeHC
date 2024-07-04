@@ -59,7 +59,7 @@
       "interactive": true
     }
   },
-  "globalEnv": ["PORT"],
+  "globalEnv": ["PORT", "CLERK_JWT_KEY"],
   "globalPassThroughEnv": [
     "NODE_ENV",
     "CI",

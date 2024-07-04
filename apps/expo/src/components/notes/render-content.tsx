@@ -47,8 +47,7 @@ const RenderContent = (props: { content: string }) => {
           <Text key={index} className="py-1">
             {block.content.map((textBlock, idx) => {
               const hasLink =
-                textBlock.marks &&
-                textBlock.marks.some((mark) => mark.type === "link");
+                textBlock.marks?.some((mark) => mark.type === "link");
               return (
                 <Text
                   key={idx}

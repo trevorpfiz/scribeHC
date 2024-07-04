@@ -18,10 +18,10 @@ import { EyeOff } from "~/lib/icons/eye-off";
 import { Loader2 } from "~/lib/icons/loader-2";
 import { cn } from "~/lib/utils";
 
-export type SignInFormProps = {
+export interface SignInFormProps {
   onSubmit?: SubmitHandler<SignIn>;
   isLoading: boolean;
-};
+}
 
 const SignInForm = ({ onSubmit = () => {}, isLoading }: SignInFormProps) => {
   const [showPassword, setShowPassword] = useState(false);

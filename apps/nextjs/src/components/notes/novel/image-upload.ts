@@ -5,8 +5,8 @@ const onUpload = (file: File) => {
   const promise = fetch("/api/upload", {
     method: "POST",
     headers: {
-      "content-type": file?.type || "application/octet-stream",
-      "x-vercel-filename": file?.name || "image.png",
+      "content-type": file.type || "application/octet-stream",
+      "x-vercel-filename": file.name || "image.png",
     },
     body: file,
   });

@@ -114,7 +114,7 @@ const starterKit = StarterKit.configure({
 const codeBlockLowlight = CodeBlockLowlight.configure({
   // configure lowlight: common /  all / use highlightJS in case there is a need to specify certain language grammars only
   // common: covers 37 language grammars which should be good enough in most cases
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+
   lowlight: createLowlight(common),
 });
 

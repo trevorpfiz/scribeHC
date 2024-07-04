@@ -1,141 +1,243 @@
-# T3 Turbo x Supabase
+<a name="readme-top"></a>
 
-![CleanShot 2023-04-11 at 23 42 53@2x](https://user-images.githubusercontent.com/51714798/231294720-1c64b391-4ecf-42d2-aad2-8c486c5d6bf5.png)
+<!-- PROJECT LOGO -->
+<br>
+<div align="center">
+  <a href="https://github.com/trevorpfiz/scribeHC">
+    <img src="https://github.com/trevorpfiz/scribeHC/assets/19765785/d073e68e-1f0e-43a8-b830-3fcfb6f50532" alt="Logo" width="80" height="80">
 
-## About
+  </a>
 
-This is an extended version of [create-t3-turbo](https://github.com/t3-oss/create-t3-turbo) implementing authentication using [Supabase Auth](https://supabase.com/docs/guides/auth) on both the web and mobile applications.
+<h3 align="center">scribeHC - AI Ambient Scribe for Healthcare</h3>
 
-### Side note for mobile
+  <p align="center">
+    This is an open source AI ambient scribe app for healthcare. Record patient-doctor conversations and automatically generate SOAP notes based on the transcripts. Make sure you are HIPAA compliant before using this in a healthcare setting.
+  </p>
+</div>
 
-**iOS:** One of the requirements for Apple's review process requires you to implement native `Sign in with Apple` if you're providing any other third party authentication method. Read more in [Section 4.8 - Design: Sign in with Apple](https://developer.apple.com/app-store/review/guidelines/#sign-in-with-apple).
+<!-- TABLE OF CONTENTS -->
+<details open>
+  <summary><strong>Table of Contents</strong></summary>
+  <ol>
+    <li>
+      <a href="#demo">Demo</a>
+    </li>
+    <li><a href="#project-details">Project Details</a></li>
+    <li><a href="#technical-details">Technical Details</a></li>
+    <li>
+      <a href="#installation-and-usage">Installation and Usage</a>
+    </li>
+    <li><a href="#feedback">Feedback</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#references">References</a></li>
+  </ol>
+</details>
 
-We have preconfigured this for you which you can find [here](./apps/expo/src/utils/auth.ts). All you need to do is to enable the Apple Provider in your [Supabase dashboard](https://app.supabase.com) and fill in your information.
+<!-- DEMO -->
 
-> We currently only supports `Sign in with Apple` - support for more providers on mobile are being worked on!
+## Demo
 
-## Quick Start
+https://github.com/trevorpfiz/scribeHC/assets/19765785/488415cb-3a45-456c-8f45-de261a148da8
 
-To get it running, follow the steps below:
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Setup dependencies
+<!-- PROJECT DETAILS -->
 
-```diff
+## Project Details
+
+### Apps
+
+- **Expo** mobile app for recording patient-doctor conversations.
+- **Next.js** dashboard for managing conversations and SOAP notes.
+- **FastAPI** for processing audio recordings, generating transcripts, and generating SOAP notes.
+
+### Features
+
+- **Animations:** `react-native-reanimated` for OpenAI-like animations.
+- **Authentication:** Sign up with Google, Apple, or email. Clerk components for Next.js, custom components (signin, signup, OTP, password reset) for Expo.
+- **Audio Recording:** Record patient-doctor conversations using `expo-av`.
+- **Transcripts + SOAP Notes:** Generated in FastAPI using OpenAI APIs.
+- **Web Dashboard:** Next.js app for managing SOAP notes.
+
+Refer to [building-hipaa-compliant](https://github.com/zacharypfiz/building-hipaa-compliant) for more information on making this project HIPAA compliant.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- TECHNICAL DETAILS -->
+
+## Technical Details
+
+### Tech Stack
+
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
+- [NativeWind](https://www.nativewind.dev/v4/overview)
+- [TypeScript](https://www.typescriptlang.org/)
+- [tRPC](https://trpc.io/)
+- [Drizzle ORM](https://orm.drizzle.team/)
+- [Clerk](https://clerk.com/)
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [SST Ion](https://ion.sst.dev/)
+- [Turborepo](https://turbo.build/repo/docs)
+
+```text
+.github
+  └─ workflows
+        └─ CI with pnpm cache setup
+.vscode
+  ├─ Recommended extensions and settings for VSCode users
+  └─ Multi-root Workspaces for smoother python experience in monorepo
+apps
+  ├─ expo
+  |   ├─ Expo SDK 51
+  |   ├─ React Native using React 18
+  |   ├─ Navigation using Expo Router
+  |   ├─ Tailwind using NativeWind
+  |   └─ Typesafe API calls using tRPC
+  ├─ nextjs
+  |   ├─ Next.js 14
+  |   ├─ React 18
+  |   ├─ Tailwind CSS
+  |   └─ E2E Typesafe API Server & Client
+  └─ fastapi
+      ├─ FastAPI for uploading and processing audio recordings
+      ├─ OpenAI Whisper for transcription
+      └─ OpenAI Chat Completions API for generating SOAP notes from transcripts
+packages
+  ├─ api
+  |   ├─ tRPC v11 router definition.
+  |   └─ Generated TypeScript client from FastAPI OpenAPI spec.
+  ├─ db
+  |   └─ Typesafe db calls using Drizzle & Amazon RDS
+  ├─ ui
+  |   └─ shadcn/ui.
+  └─ validators
+      └─ Zod schemas for repo-wide type-safety and validation.
+infra
+  └─ SST Ion resources
+tooling
+  ├─ eslint
+  |   └─ shared, fine-grained, eslint presets
+  ├─ prettier
+  |   └─ shared prettier configuration
+  ├─ tailwind
+  |   └─ shared tailwind configuration
+  ├─ github
+  |   └─ shared github actions
+  └─ typescript
+      └─ shared tsconfig you can extend from
+```
+
+> In this project, we use `@shc` as a placeholder for package names. As a user, you might want to replace it with your own organization or project name. You can use find-and-replace to change all the instances of `@shc` to something like `@my-company` or `@project-name`.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- INSTALLATION AND USAGE -->
+
+## Installation and Usage
+
+### 1. Setup dependencies
+
+```bash
 # Install dependencies
 pnpm i
 
-# Configure environment variables.
+# Configure environment variables
 # There is an `.env.example` in the root directory you can use for reference
-# Ensure that the POSTGRES_URL is in the same format as in the example
 cp .env.example .env
+cp .env.example .env.local
+```
 
-# Push the Drizzle schema to your database (w/ drizzle-kit push)
-pnpm db:push
+Configure AWS credentials
+<https://docs.sst.dev/advanced/iam-credentials#loading-from-a-file>
 
-# Or use migrations (w/ drizzle-kit generate and drizzle-kit migrate)
+Install the SST CLI
+<https://ion.sst.dev/docs/reference/cli>
+
+```bash
+# Run SST Ion (run this in apps/nextjs)
+pnpm dev
+
+# Push the Drizzle schema to the RDS database
 pnpm db:generate
 pnpm db:migrate
 ```
 
-> **NOTE:** Migrations seem preferable for Supabase. Still figuring out the best way to do migrations for local development/branching. <https://twitter.com/plushdohn/status/1780126181490135371>
-
-### Setting up Supabase
-
-1. Go to [the Supabase dashboard](https://app.supabase.com/projects) and create a new project.
-2. Under project settings, retrieve the environment variables `reference id`, `project url` & `anon public key` and paste them into [.env](./.env.example) and [apps/expo/.env](./apps/expo/.env.example) in the necessary places. You'll also need the database password you set when creating the project.
-3. Under `Auth`, configure any auth provider(s) of your choice. This repo is using Github for Web and Apple for Mobile.
-4. If you want to use the `Email` provider and `email confirmation`, go to `Auth` -> `Email Templates` and change the `Confirm signup` from `{{ .ConfirmationURL }}` to `{{ .RedirectTo }}&token_hash={{ .TokenHash }}&type=signup`, according to <https://supabase.com/docs/guides/auth/redirect-urls#email-templates-when-using-redirectto>. `.RedirectTo` will need to be added to your `Redirect URLs` in the next step.
-5. Under `Auth` -> `URL Configuration`, set the `Site URL` to your production URL and add `http://localhost:3000/**` and `https://*-username.vercel.app/**` to `Redirect URLs` as detailed here <https://supabase.com/docs/guides/auth/redirect-urls#vercel-preview-urls>.
-6. Setup a trigger when a new user signs up: <https://supabase.com/docs/guides/auth/managing-user-data#using-triggers>. Can run this in the SQL Editor.
-
-```sql
--- inserts a row into public.profile
-create function public.handle_new_user()
-returns trigger
-language plpgsql
-security definer set search_path = public
-as $$
-begin
-  insert into public.t3turbo_profile (id, email, name, image)
-  values (
-    new.id,
-    new.email,
-    COALESCE(
-      new.raw_user_meta_data ->> 'name',
-      new.raw_user_meta_data ->> 'full_name',
-      new.raw_user_meta_data ->> 'user_name',
-      '[redacted]'
-    ),
-    new.raw_user_meta_data ->> 'avatar_url'
-  )
-  on conflict (id) do update set
-    email = excluded.email,
-    name = excluded.name,
-    image = excluded.image;
-  return new;
-end;
-$$;
-
--- trigger the function every time a user is created
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
-
--- trigger the function when a user signs in/their email is confirmed to get missing values
-create trigger on_auth_user_verified
-  after update on auth.users
-  for each row when (
-    old.last_sign_in_at is null
-    and new.last_sign_in_at is not null
-  ) execute procedure public.handle_new_user();
-```
-
-```sql
--- drop a trigger if needed
-drop trigger "on_auth_user_verified" on auth.users;
-```
-
-7. Remove access to the `public` schema as we are only using the server
-
-By default, Supabase exposes the `public` schema to the PostgREST API to allow the `supabase-js` client query the database directly from the client. However, since we route all our requests through the Next.js application (through tRPC), we don't want our client to have this access. To disable this, execute the following SQL query in the SQL Editor on your Supabase dashboard:
-
-```sql
-REVOKE USAGE ON SCHEMA public FROM anon, authenticated;
-```
-
-![disable public access](https://user-images.githubusercontent.com/51714798/231810706-88b1db82-0cfd-485f-9043-ef12a53dc62f.png)
-
-> Note: This means you also don't need to enable row-level security (RLS) on your database if you don't want to.
-
-### Configure Expo `dev`-script
+### 2. Configure Expo `dev`-script
 
 #### Use iOS Simulator
 
-1. Make sure you have XCode and XCommand Line Tools installed [as shown on expo docs](https://docs.expo.dev/workflow/ios-simulator/).
+1. Make sure you have XCode and XCommand Line Tools installed [as shown on expo docs](https://docs.expo.dev/workflow/ios-simulator).
+
    > **NOTE:** If you just installed XCode, or if you have updated it, you need to open the simulator manually once. Run `npx expo start` in the root dir, and then enter `I` to launch Expo Go. After the manual launch, you can run `pnpm dev` in the root directory.
 
-```diff
-+  "dev": "expo start --ios",
-```
+   ```diff
+   +  "dev:ios": "expo start --ios",
+   ```
 
-3. Run `pnpm dev` at the project root folder.
+2. Run `pnpm dev:ios` at `apps/expo` to open the iOS simulator.
 
-> **TIP:** It might be easier to run each app in separate terminal windows so you get the logs from each app separately. This is also required if you want your terminals to be interactive, e.g. to access the Expo QR code. You can run `pnpm --filter expo dev` and `pnpm --filter nextjs dev` to run each app in a separate terminal window.
+#### Use Android Emulator
 
-#### For Android
+1. Install Android Studio tools [as shown on expo docs](https://docs.expo.dev/workflow/android-studio-emulator).
 
-1. Install Android Studio tools [as shown on expo docs](https://docs.expo.dev/workflow/android-studio-emulator/).
-2. Change the `dev` script at `apps/expo/package.json` to open the Android emulator.
+2. Run `pnpm dev:android` script at `apps/expo` to open the Android emulator.
 
-```diff
-+  "dev": "expo start --android",
-```
+   ```diff
+   +  "dev:android": "expo start --android",
+   ```
 
-3. Run `pnpm dev` at the project root folder.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- FEEDBACK -->
+
+## Feedback
+
+Share your thoughts in [Discussions](https://github.com/trevorpfiz/scribeHC/discussions)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- CONTRIBUTING -->
+
+## Contributing
+
+We welcome contributions! Find out how you can contribute to the project in `CONTRIBUTING.md`: [Contributing Guidelines](https://github.com/trevorpfiz/scribeHC/blob/main/CONTRIBUTING.md)
+
+<a href="https://github.com/trevorpfiz/scribeHC/graphs/contributors">
+  <p align="center">
+    <img src="https://contrib.rocks/image?repo=trevorpfiz/scribeHC" alt="A table of avatars from the project's contributors" />
+  </p>
+</a>
+
+<p align="center">
+  Made with <a rel="noopener noreferrer" target="_blank" href="https://contrib.rocks">contrib.rocks</a>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the [MIT License](https://github.com/trevorpfiz/scribeHC/blob/main/LICENSE). See `LICENSE` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- REFERENCES -->
 
 ## References
 
-- For more useful information on how to deploy this stack, refer to [t3-oss/create-t3-turbo](https://github.com/t3-oss/create-t3-turbo).
-- [Supabase Documentation](https://supabase.com/docs)
-- This stack originates from [create-t3-app](https://github.com/t3-oss/create-t3-app).
-- A [blog post](https://jumr.dev/blog/t3-turbo) where I wrote how to migrate a T3 app into this.
+This repo originates from [create-t3-turbo](https://github.com/t3-oss/create-t3-turbo). Feel free to check out the project if you are running into issues with running/deploying the starter.
+
+Thanks as well to the following:
+
+- [next-fast-turbo](https://github.com/cording12/next-fast-turbo) for the learnings on how to bring FastAPI into the project.
+
+- [Build a ChatGPT Clone with React Native](https://youtu.be/8ztx68SUOQo?si=f-HCi6K1qpVX-ATV) by Simon Grimm for the inspiring the direction of the mobile app.
+
+- [Andy AI](https://www.ycombinator.com/companies/andy-ai) for fueling the original idea of this project.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
