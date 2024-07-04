@@ -4,8 +4,7 @@
 <br>
 <div align="center">
   <a href="https://github.com/trevorpfiz/scribeHC">
-    <img src="https://github.com/trevorpfiz/scribeHC/assets/19765785/d073e68e-1f0e-43a8-b830-3fcfb6f50532" alt="Logo" width="80" height="80">
-
+    <img src="https://github.com/trevorpfiz/scribeHC/assets/24904780/0e15369e-2550-42da-84ad-0f224af1ac8a" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">scribeHC - AI Ambient Scribe for Healthcare</h3>
