@@ -17,7 +17,7 @@ export const getBaseUrl = (port = 3000) => {
   const localhost = debuggerHost?.split(":")[0];
 
   if (!localhost) {
-    // return "https://turbo.t3.gg";
+    // return "https://scribeHCyour-domain.com";
     throw new Error(
       "Failed to get localhost. Please point to your production server.",
     );

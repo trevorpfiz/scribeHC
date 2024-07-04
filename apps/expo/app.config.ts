@@ -36,7 +36,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   web: {
     bundler: "metro",
     output: "single",
-    favicon: "./assets/favicon.png",
+    favicon: "./assets/icon.png",
   },
   experiments: {
     tsconfigPaths: true,

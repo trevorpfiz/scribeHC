@@ -59,6 +59,7 @@ https://github.com/trevorpfiz/scribeHC/assets/19765785/488415cb-3a45-456c-8f45-d
 - **Audio Recording:** Record patient-doctor conversations using `expo-av`.
 - **Transcripts + SOAP Notes:** Generated in FastAPI using OpenAI APIs.
 - **Web Dashboard:** Next.js app for managing SOAP notes.
+- **Note Editor:** Edit generated SOAP notes using [novel](https://novel.sh/).
 
 Refer to [building-hipaa-compliant](https://github.com/zacharypfiz/building-hipaa-compliant) for more information on making this project HIPAA compliant.
 

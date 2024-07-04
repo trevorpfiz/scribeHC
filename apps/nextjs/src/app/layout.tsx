@@ -22,7 +22,7 @@ if (env.NODE_ENV === "production") {
 export const metadata: Metadata = {
   metadataBase: new URL(
     env.NODE_ENV === "production"
-      ? "https://app.scribeHCCC.com"
+      ? "https://scribeHCyour-domain.com"
       : "http://localhost:3000",
   ),
   title: "scribeHC",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "scribeHC",
     description: "AI ambient scribe app for healthcare.",
-    url: "https://www.scribeHCCC.com",
+    url: "https://www.scribeHCyour-domain.com",
     siteName: "scribeHC",
   },
   twitter: {
