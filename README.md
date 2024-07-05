@@ -83,6 +83,8 @@ Refer to [building-hipaa-compliant](https://github.com/zacharypfiz/building-hipa
 - [Tailwind CSS](https://tailwindcss.com/)
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [SST Ion](https://ion.sst.dev/)
+- [Jest](https://jestjs.io/)
+- [Testing Library](https://testing-library.com/)
 - [Turborepo](https://turbo.build/repo/docs)
 
 ```text
@@ -98,7 +100,8 @@ apps
   |   ├─ React Native using React 18
   |   ├─ Navigation using Expo Router
   |   ├─ Tailwind using NativeWind
-  |   └─ Typesafe API calls using tRPC
+  |   ├─ Typesafe API calls using tRPC
+  |   └─ Jest + React Native Testing Library for unit tests
   ├─ nextjs
   |   ├─ Next.js 14
   |   ├─ React 18
