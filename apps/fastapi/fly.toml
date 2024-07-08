@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for wellchart-fastapi on 2024-05-11T03:18:23-05:00
+# fly.toml app configuration file generated for scribehc-fastapi on 2024-07-03T03:18:23-05:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'wellchart-fastapi'
+app = 'scribehc-fastapi'
 primary_region = 'ord'
 
 [build]
